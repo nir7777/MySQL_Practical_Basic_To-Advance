@@ -1,0 +1,1088 @@
+****************************************************************************************************************************************
+                     *
+ 1. Show Database:   *
+                     *
+**********************
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mysql              |
+| performance_schema |
+| sakila             |
+| sys                |
+| world              |
++--------------------+
+6 rows in set (0.00 sec)
+
+
+
+****************************************************************************************************************************************
+                     *
+ 2. Create Database: *
+                     *
+**********************
+
+
+mysql> create database test_db;
+Query OK, 1 row affected (0.01 sec)
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mysql              |
+| performance_schema |
+| sakila             |
+| sys                |
+| test_db            |
+| world              |
++--------------------+
+7 rows in set (0.00 sec)
+
+
+
+****************************************************************************************************************************************
+                     *
+ 3. Use Database:    *
+                     *
+**********************
+
+mysql> USE test_db;
+Database changed
+
+
+
+****************************************************************************************************************************************
+                        *
+ 4. select database();  *   To check current database is same as we selected by using use database cmd.
+                        *
+*************************
+
+mysql> SELECT DATABASE();
++------------+
+| DATABASE() |
++------------+
+| test_db    |
++------------+
+1 row in set (0.00 sec)
+
+
+
+
+****************************************************************************************************************************************
+                          *
+ 5. Deleting Database:    *
+                          *
+***************************
+
+mysql> DROP DATABASE test_db;
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mysql              |
+| performance_schema |
+| sakila             |
+| sys                |
+| world              |
++--------------------+
+6 rows in set (0.01 sec)
+
+
+
+
+****************************************************************************************************************************************
+                          *
+ 5. Creating Table:       *
+                          *
+***************************
+
+mysql> CREATE DATABASE store_db;
+Query OK, 1 row affected (0.02 sec)
+
+mysql> USE store_db;
+Database changed
+
+mysql> CREATE TABLE customers(
+    -> id INT,
+    -> name varchar(100)
+    -> );
+Query OK, 0 rows affected (0.03 sec)
+
+
+
+
+
+****************************************************************************************************************************************
+                          *
+ 6. Describe Table:       *
+                          *
+***************************
+
+mysql> DESC customers;
++-------+--------------+------+-----+---------+-------+
+| Field | Type         | Null | Key | Default | Extra |
++-------+--------------+------+-----+---------+-------+
+| id    | int          | YES  |     | NULL    |       |
+| name  | varchar(100) | YES  |     | NULL    |       |
++-------+--------------+------+-----+---------+-------+
+2 rows in set (0.00 sec)
+
+
+
+
+
+****************************************************************************************************************************************
+                          *
+7. Show Tables:           *
+                          *
+***************************
+
+mysql> show tables;
++--------------------+
+| Tables_in_store_db |
++--------------------+
+| customers          |
++--------------------+
+1 row in set (0.00 sec)
+
+
+
+
+
+****************************************************************************************************************************************
+                             *
+8. Insert Data in Tables:    *
+                             *
+******************************
+
+mysql> INSERT INTO customers(id,name) VALUES(1,'Ajay');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO customers(id,name) VALUES(2,'Ritu');
+Query OK, 1 row affected (0.01 sec)
+
+*Insert multiple record at once
+mysql> INSERT INTO customers(id,name) VALUES(3,'Akshay'), (4, 'Simran'), (5,'Pranav');
+Query OK, 3 rows affected (0.01 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> DESC customers;
++-------+--------------+------+-----+---------+-------+
+| Field | Type         | Null | Key | Default | Extra |
++-------+--------------+------+-----+---------+-------+
+| id    | int          | YES  |     | NULL    |       |
+| name  | varchar(100) | YES  |     | NULL    |       |
++-------+--------------+------+-----+---------+-------+
+2 rows in set (0.00 sec)
+
+
+
+
+
+
+****************************************************************************************************************************************
+                             *
+9. Reading data from Table   *
+                             *
+******************************
+
+
+mysql> SELECT * FROM customers;
++------+--------+
+| id   | name   |
++------+--------+
+|    1 | Ajay   |
+|    2 | Ritu   |
+|    3 | Akshay |
+|    4 | Simran |
+|    5 | Pranav |
++------+--------+
+5 rows in set (0.00 sec)
+
+Reading columns:
+mysql> SELECT id FROM customers;
++------+
+| id   |
++------+
+|    1 |
+|    2 |
+|    3 |
+|    4 |
+|    5 |
++------+
+5 rows in set (0.00 sec)
+
+
+mysql> SELECT id,name FROM customers;
++------+--------+
+| id   | name   |
++------+--------+
+|    1 | Ajay   |
+|    2 | Ritu   |
+|    3 | Akshay |
+|    4 | Simran |
+|    5 | Pranav |
++------+--------+
+5 rows in set (0.00 sec)
+
+
+
+****************************************************************************************************************************************
+                             *
+10. Where clause Condition   *
+                             *
+******************************
+
+ mysql> SELECT * FROM customers WHERE id=4;
++------+--------+
+| id   | name   |
++------+--------+
+|    4 | Simran |
++------+--------+
+1 row in set (0.00 sec)
+
+
+mysql> SELECT * FROM customers WHERE name='RItu';
++------+------+
+| id   | name |
++------+------+
+|    2 | Ritu |
++------+------+
+1 row in set (0.00 sec)
+
+
+
+
+****************************************************************************************************************************************
+                              *
+11. Modify/Update Table Data  *
+                              *
+*******************************
+
+mysql> UPDATE customers SET name='Abhishek' WHERE id=3;
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> SELECT * FROM customers;
++------+----------+
+| id   | name     |
++------+----------+
+|    1 | Ajay     |
+|    2 | Ritu     |
+|    3 | Abhishek |
+|    4 | Simran   |
+|    5 | Pranav   |
++------+----------+
+5 rows in set (0.00 sec)
+
+
+
+
+****************************************************************************************************************************************
+                              *
+12. Deleting Data from Table  *
+                              *
+*******************************
+
+mysql> DELETE FROM customers WHERE id=5;
+Query OK, 1 row affected (0.01 sec)
+
+mysql> SELECT * FROM customers;
++------+----------+
+| id   | name     |
++------+----------+
+|    1 | Ajay     |
+|    2 | Ritu     |
+|    3 | Abhishek |
+|    4 | Simran   |
++------+----------+
+4 rows in set (0.00 sec)
+
+
+****************************************************************************************************************************************
+                              *
+13. Deleting Whole Table      *
+                              *
+*******************************
+
+mysql> Drop table customers;
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> SELECT * FROM customers;
+ERROR 1146 (42S02): Table 'store_db.customers' doesn't exist
+mysql>
+
+
+
+****************************************************************************************************************************************
+                              *
+14. NOT NULL                  *
+                              *
+*******************************
+
+Lets check our tables description:
+
+mysql> desc customers;
++-------+--------------+------+-----+---------+-------+
+| Field | Type         | Null | Key | Default | Extra |
++-------+--------------+------+-----+---------+-------+
+| id    | int          | YES  |     | NULL    |       |
+| name  | varchar(100) | YES  |     | NULL    |       |
++-------+--------------+------+-----+---------+-------+
+2 rows in set (0.00 sec)
+
+* As we can see Null column represents yes it means while inserting data 
+  we can keep any column as null value.
+* Now lets add only value of id:
+
+mysql> INSERT INTO customers(id) VALUES(1);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from customers;
++------+------+
+| id   | name |
++------+------+
+|    1 | NULL |
++------+------+
+1 row in set (0.00 sec)
+
+* As we see value of name is NULL it means if we didn't gave value to any column it will 
+  take null bydefault, as the default column showing NULL.
+* If we do not provide value for any column sql takes it as null.
+
+* mysql> INSERT INTO customers(name) VALUES('Jay');
+Query OK, 1 row affected (0.00 sec)
+
+
+* We can not keep both values as empty:
+mysql> INSERT INTO customers VALUES;
+* This will throw error.
+
+
+mysql> select * from customers;
++------+------+
+| id   | name |
++------+------+
+|    1 | NULL |
+| NULL | Jay  |
++------+------+
+2 rows in set (0.00 sec)
+
+
+We can avoid above case by using not null while declaring the column.
+
+mysql> CREATE TABLE customers1(
+    -> id INT NOT NULL,
+    -> name VARCHAR(50) NOT NULL
+    -> );
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> DESC customers1;
++-------+-------------+------+-----+---------+-------+
+| Field | Type        | Null | Key | Default | Extra |
++-------+-------------+------+-----+---------+-------+
+| id    | int         | NO   |     | NULL    |       |
+| name  | varchar(50) | NO   |     | NULL    |       |
++-------+-------------+------+-----+---------+-------+
+2 rows in set (0.00 sec)
+
+
+* Now here Null column contains NO i.e we cannot keep that column null, 
+  we need to insert a value init. 
+mysql> INSERT INTO customers1(id) VALUES(1);
+ERROR 1364 (HY000): Field 'name' doesn't have a default value
+
+
+
+
+****************************************************************************************************************************************
+                              *
+15. Default Values            *
+                              *
+*******************************
+
+
+mysql> DESC customer2;
++----------+-------------+------+-----+---------+-------+
+| Field    | Type        | Null | Key | Default | Extra |
++----------+-------------+------+-----+---------+-------+
+| id       | int         | YES  |     | NULL    |       |
+| name     | varchar(50) | YES  |     | NULL    |       |
+| acc_type | varchar(50) | YES  |     | NULL    |       |
++----------+-------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+
+
+mysql> CREATE TABLE customer3(
+    -> id INT NOT NULL,
+    -> name VARCHAR(50),
+    -> acc_type VARCHAR(50) NOT NULL DEFAULT 'Savings');
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> DESC customer3;
++----------+-------------+------+-----+---------+-------+
+| Field    | Type        | Null | Key | Default | Extra |
++----------+-------------+------+-----+---------+-------+
+| id       | int         | NO   |     | NULL    |       |
+| name     | varchar(50) | YES  |     | NULL    |       |
+| acc_type | varchar(50) | NO   |     | Savings |       |
++----------+-------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+* In above table we have set a default value for acc_type.
+
+mysql> INSERT INTO customer3(id,name,acc_type) VALUES(1,'Lucky','savings') ;
+Query OK, 1 row affected (0.01 sec)
+
+mysql> SELECT * FROM customer3;
++----+-------+----------+
+| id | name  | acc_type |
++----+-------+----------+
+|  1 | Lucky | savings  |
++----+-------+----------+
+1 row in set (0.00 sec)
+
+* Above we have wrote savings in small case it means we can write any name there while inserting.
+
+mysql> INSERT INTO customer3(id,name) VALUES(1,'Lucky') ;
+Query OK, 1 row affected (0.01 sec)
+
+mysql> SELECT * FROM customer3;
++----+-------+----------+
+| id | name  | acc_type |
++----+-------+----------+
+|  1 | Lucky | savings  |
+|  1 | Lucky | Savings  |
++----+-------+----------+
+2 rows in set (0.00 sec)
+
+Above we have not mention acc_type column while inserting but it is taking Savings as default value.
+
+
+
+
+************************************************************************************************************************************************************************
+                              *
+16. Primary Key               *
+                              *
+*******************************
+
+mysql> CREATE TABLE customer4(
+    -> acc_no INT PRIMARY KEY,
+    -> name VARCHAR(50) NOT NULL,
+    -> acc_type VARCHAR(50) NOT NULL DEFAULT 'Savings'
+    -> );
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> DESC customer4;
++----------+-------------+------+-----+---------+-------+
+| Field    | Type        | Null | Key | Default | Extra |
++----------+-------------+------+-----+---------+-------+
+| acc_no   | int         | NO   | PRI | NULL    |       |
+| name     | varchar(50) | NO   |     | NULL    |       |
+| acc_type | varchar(50) | NO   |     | Savings |       |
++----------+-------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+
+* When we give primary key to a column there is no need to mention NOT NULL.
+
+mysql> INSERT INTO customer4(acc_no,name)
+    -> VALUES(1001, 'Raj'), (1002, 'Dev'), (1003, 'Mayank');
+Query OK, 3 rows affected (0.00 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> SELECT  * FROM customer4;
++--------+--------+----------+
+| acc_no | name   | acc_type |
++--------+--------+----------+
+|   1001 | Raj    | Savings  |
+|   1002 | Dev    | Savings  |
+|   1003 | Mayank | Savings  |
++--------+--------+----------+
+3 rows in set (0.00 sec)
+
+* We cannot repeat the value of primary key column, it should be unique always.
+* Duplicate values are not allowed in primary key column.
+* One table can contain only 1 primary key column.
+* Primary Key column cannot be empty/NULL while inserting record.
+
+
+
+************************************************************************************************************************************************************************
+                              *
+16. Auto Increment            *
+                              *
+*******************************
+
+mysql> CREATE TABLE customer5(
+    -> id INT PRIMARY KEY AUTO_INCREMENT,
+    -> name VARCHAR(50) NOT NULL,
+    -> acc_type VARCHAR(50) NOT NULL
+    -> );
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> DESC customer5;
++----------+-------------+------+-----+---------+----------------+
+| Field    | Type        | Null | Key | Default | Extra          |
++----------+-------------+------+-----+---------+----------------+
+| id       | int         | NO   | PRI | NULL    | auto_increment |
+| name     | varchar(50) | NO   |     | NULL    |                |
+| acc_type | varchar(50) | NO   |     | NULL    |                |
++----------+-------------+------+-----+---------+----------------+
+3 rows in set (0.00 sec)
+
+
+mysql> INSERT INTO customer5(name,acc_type) VALUES("Raj","Savings");
+Query OK, 1 row affected (0.01 sec)
+
+mysql> SELECT * FROM customer5;
++----+------+----------+
+| id | name | acc_type |
++----+------+----------+
+|  1 | Raj  | Savings  |
++----+------+----------+
+1 row in set (0.00 sec)
+
+mysql> INSERT INTO customer5(name,acc_type) VALUES("Shyam","Savings"),('Gau','Savings');
+Query OK, 2 rows affected (0.00 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+mysql> INSERT INTO customer5(id,name,acc_type) VALUES(101,"Prem","Savings");
+Query OK, 1 row affected (0.01 sec)
+
+mysql> SELECT * FROM customer5;
++-----+-------+----------+
+| id  | name  | acc_type |
++-----+-------+----------+
+|   1 | Raj   | Savings  |
+|   2 | Shyam | Savings  |
+|   3 | Gau   | Savings  |
+| 101 | Prem  | Savings  |
++-----+-------+----------+
+4 rows in set (0.00 sec)
+
+
+
+
+
+************************************************************************************************************************************************************************
+                              *
+17. Alias                     *
+                              *
+*******************************
+
+mysql> SELECT acc_type AS 'Account Number' FROM customer5;
++----------------+
+| Account Number |
++----------------+
+| Savings        |
+| Savings        |
+| Savings        |
+| Savings        |
++----------------+
+4 rows in set (0.00 sec)
+
+
+
+
+
+************************************************************************************************************************************************************************
+*                             *
+*    Exercise 01              *
+*                             *
+*******************************
+
+
+Q. Create a database- bank_db
+Q. Create a table-employees which contains,
+   emp_id, name,designation,dept.
+Q. emp_id column should not allow duplicate and null values
+   Value of emp_id column should auto increment
+Q. name column should not contain null value
+Q. desig column should have default value as 'Probation'
+
+
+mysql> CREATE DATABASE bank_db;
+Query OK, 1 row affected (0.02 sec)
+
+mysql> USE bank_db;
+Database changed
+
+mysql> CREATE TABLE employees(
+    -> emp_id INT PRIMARY KEY AUTO_INCREMENT,
+    -> name VARCHAR(50) NOT NULL,
+    -> designation VARCHAR(50) NOT NULL DEFAULT 'Probation',
+    -> dept VARCHAR(50) NOT NULL
+    -> );
+Query OK, 0 rows affected (0.03 sec)
+
+
+mysql> DESC employees;
++-------------+-------------+------+-----+-----------+----------------+
+| Field       | Type        | Null | Key | Default   | Extra          |
++-------------+-------------+------+-----+-----------+----------------+
+| emp_id      | int         | NO   | PRI | NULL      | auto_increment |
+| name        | varchar(50) | NO   |     | NULL      |                |
+| designation | varchar(50) | NO   |     | Probation |                |
+| dept        | varchar(50) | NO   |     | NULL      |                |
++-------------+-------------+------+-----+-----------+----------------+
+4 rows in set (0.00 sec)
+
+Q. Insert Data into table
+
+mysql> INSERT INTO employees(emp_id,name,designation,dept)
+    -> VALUES(101,'Raju','Manager','Loan'),
+    -> (102,'Sham','Cashier','Cash');
+Query OK, 2 rows affected (0.00 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+
+mysql> INSERT INTO employees(name,designation,dept)
+    -> VALUES('Paul','Associate','Loan'),
+    -> ('Alex','Accountant','Account'),
+    -> ('Victor','Associate','Deposit');
+Query OK, 3 rows affected (0.01 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+
+Q. Display Data of table:
+
+mysql> SELECT * FROM employees;
++--------+--------+-------------+---------+
+| emp_id | name   | designation | dept    |
++--------+--------+-------------+---------+
+|    101 | Raju   | Manager     | Loan    |
+|    102 | Sham   | Cashier     | Cash    |
+|    103 | Paul   | Associate   | Loan    |
+|    104 | Alex   | Accountant  | Account |
+|    105 | Victor | Associate   | Deposit |
++--------+--------+-------------+---------+
+5 rows in set (0.00 sec)
+
+
+Q. Display only emp_id and name of employee:
+
+
+mysql> SELECT emp_id,name FROM employees;
++--------+--------+
+| emp_id | name   |
++--------+--------+
+|    101 | Raju   |
+|    102 | Sham   |
+|    103 | Paul   |
+|    104 | Alex   |
+|    105 | Victor |
++--------+--------+
+5 rows in set (0.00 sec)
+
+
+************************************************************************************************************************************************************************
+*                             *
+*    Exercise 02              *
+*                             *
+*******************************
+
+Q. Display the data
+mysql> SELECT * FROM employees WHERE dept='Loan';
++--------+------+-------------+------+
+| emp_id | name | designation | dept |
++--------+------+-------------+------+
+|    101 | Raju | Manager     | Loan |
+|    103 | Paul | Associate   | Loan |
++--------+------+-------------+------+
+2 rows in set (0.00 sec)
+
+Q.
+mysql> SELECT * FROM employees WHERE emp_id=101;
++--------+------+-------------+------+
+| emp_id | name | designation | dept |
++--------+------+-------------+------+
+|    101 | Raju | Manager     | Loan |
++--------+------+-------------+------+
+1 row in set (0.00 sec)
+
+
+Q.
+mysql> SELECT emp_id,name FROM employees WHERE name='Raju';
++--------+------+
+| emp_id | name |
++--------+------+
+|    101 | Raju |
++--------+------+
+1 row in set (0.00 sec)
+
+mysql> SELECT emp_id,name FROM employees WHERE emp_id=101;
++--------+------+
+| emp_id | name |
++--------+------+
+|    101 | Raju |
++--------+------+
+1 row in set (0.00 sec)
+
+Q. Update dept of Paul from Loan to it
+
+mysql> UPDATE employees SET dept='IT' WHERE emp_id=103;
+Query OK, 1 row affected (0.02 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> SELECT * FROM employees;
++--------+--------+-------------+---------+
+| emp_id | name   | designation | dept    |
++--------+--------+-------------+---------+
+|    101 | Raju   | Manager     | Loan    |
+|    102 | Sham   | Cashier     | Cash    |
+|    103 | Paul   | Associate   | IT      |
+|    104 | Alex   | Accountant  | Account |
+|    105 | Victor | Associate   | Deposit |
++--------+--------+-------------+---------+
+5 rows in set (0.00 sec)
+
+
+Q. Delete the record of Sham
+
+mysql> DELETE FROM employees WHERE name='Sham';
+Query OK, 1 row affected (0.01 sec)
+
+mysql> SELECT * FROM employees;
++--------+--------+-------------+---------+
+| emp_id | name   | designation | dept    |
++--------+--------+-------------+---------+
+|    101 | Raju   | Manager     | Loan    |
+|    103 | Paul   | Associate   | IT      |
+|    104 | Alex   | Accountant  | Account |
+|    105 | Victor | Associate   | Deposit |
++--------+--------+-------------+---------+
+4 rows in set (0.00 sec)
+
+
+************************************************************************************************************************************************************************
+*                             *
+* 18. String Functions        *
+*                             *
+*******************************
+
+1. CONCAT Function:
+
+syntax: CONCAT(first_col, sec_col)
+  OR    CONCAT(first_word, sec_word )
+
+Using with words:
+mysql> SELECT CONCAT('Good',' ','Morning') AS 'Greet';
++--------------+
+| Greet        |
++--------------+
+| Good Morning |
++--------------+
+1 row in set (0.00 s)
+
+
+Using with table:
+
+Consider below table:
++--------+--------+-------------+---------+----------+
+| emp_id | name   | designation | dept    | lastname |
++--------+--------+-------------+---------+----------+
+|    101 | Raju   | Manager     | Loan    | Sharma   |
+|    103 | Paul   | Associate   | IT      | Verma    |
+|    104 | Alex   | Accountant  | Account | Rajput   |
+|    105 | Victor | Associate   | Deposit | Corse    |
++--------+--------+-------------+---------+----------+
+
+Concatenate  name and last name as Full name 
+mysql> SELECT CONCAT(name,lastname) AS 'Full Name' FROM employees;
++-------------+
+| Full Name   |
++-------------+
+| RajuSharma  |
+| PaulVerma   |
+| AlexRajput  |
+| VictorCorse |
++-------------+
+4 rows in set (0.00 sec)
+
+Mention Fullname with emp_id:
+
+mysql> SELECT emp_id,CONCAT(name,' ',lastname) AS 'Full Name' FROM employees;
++--------+--------------+
+| emp_id | Full Name    |
++--------+--------------+
+|    101 | Raju Sharma  |
+|    103 | Paul Verma   |
+|    104 | Alex Rajput  |
+|    105 | Victor Corse |
++--------+--------------+
+4 rows in set (0.00 sec)
+
+
+
+2. CONCAT_WS: ws means with separator
+syntax: CONCAT_WS('-', name,lastname)
+
+mysql> Select CONCAT_WS('-', name, lastname) AS 'Separator' from employees;
++--------------+
+| Separator    |
++--------------+
+| Raju-Sharma  |
+| Paul-Verma   |
+| Alex-Rajput  |
+| Victor-Corse |
++--------------+
+4 rows in set (0.00 sec)
+
+
+mysql> SELECT CONCAT_WS(':', emp_id,name,designation,dept,lastname) from employees;
++-------------------------------------------------------+
+| CONCAT_WS(':', emp_id,name,designation,dept,lastname) |
++-------------------------------------------------------+
+| 101:Raju:Manager:Loan:Sharma                          |
+| 103:Paul:Associate:IT:Verma                           |
+| 104:Alex:Accountant:Account:Rajput                    |
+| 105:Victor:Associate:Deposit:Corse                    |
++-------------------------------------------------------+
+4 rows in set (0.00 sec)
+
+
+
+3. SUBSTRING:
+SUBSTRING('Hey Buddy',1,4);
+
+mysql> select SUBSTRING('Hello Budddy', 1,4);
++--------------------------------+
+| SUBSTRING('Hello Budddy', 1,4) |
++--------------------------------+
+| Hell                           |
++--------------------------------+
+1 row in set (0.00 sec)
+
+mysql> select SUBSTRING('Hello Budddy', 1,6);
++--------------------------------+
+| SUBSTRING('Hello Budddy', 1,6) |
++--------------------------------+
+| Hello                          |
++--------------------------------+
+1 row in set (0.00 sec)
+
+
+
+mysql> select SUBSTRING('Hello Buddy', 7);
++-----------------------------+
+| SUBSTRING('Hello Buddy', 7) |
++-----------------------------+
+| Buddy                       |
++-----------------------------+
+1 row in set (0.00 sec)
+
+
+mysql> select SUBSTRING('Hello Buddy Raju',-4);
++----------------------------------+
+| SUBSTRING('Hello Buddy Raju',-4) |
++----------------------------------+
+| Raju                             |
++----------------------------------+
+1 row in set (0.00 sec)
+
+
+mysql> SELECT SUBSTRING(emp_id,2), name,lastname from employees;
++---------------------+--------+----------+
+| SUBSTRING(emp_id,2) | name   | lastname |
++---------------------+--------+----------+
+| 01                  | Raju   | Sharma   |
+| 03                  | Paul   | Verma    |
+| 04                  | Alex   | Rajput   |
+| 05                  | Victor | Corse    |
++---------------------+--------+----------+
+4 rows in set (0.00 sec)
+
+
+4. REPLACE:
+REPLACE(str, from_str, to_str)
+Replace('Hey Buddy','Hey','Hello')
+
+mysql> SELECT REPLACE('ABCDPQR', 'PQR', 'XYZ');
++----------------------------------+
+| REPLACE('ABCDPQR', 'PQR', 'XYZ') |
++----------------------------------+
+| ABCDXYZ                          |
++----------------------------------+
+1 row in set (0.00 sec)
+
+mysql> SELECT REPLACE(emp_id, 10,1000) from employees;
++--------------------------+
+| REPLACE(emp_id, 10,1000) |
++--------------------------+
+| 10001                    |
+| 10003                    |
+| 10004                    |
+| 10005                    |
++--------------------------+
+4 rows in set (0.00 sec)
+
+
+
+mysql> SELECT REPLACE(emp_id, 10, 'EMP'),name from employees;
++----------------------------+--------+
+| REPLACE(emp_id, 10, 'EMP') | name   |
++----------------------------+--------+
+| EMP1                       | Raju   |
+| EMP3                       | Paul   |
+| EMP4                       | Alex   |
+| EMP5                       | Victor |
++----------------------------+--------+
+4 rows in set (0.00 sec)
+
+
+
+
+************************************************************************************************************************************************************************
+*                             *
+* Excercise 3                 *
+*                             *
+*******************************
+
+Q1. Display 101:Raju:Manager:Loan
+
++-------------------------------------------------+
+| CONCAT_WS(':', emp_id, name, designation, dept) |
++-------------------------------------------------+
+| 101:Raju:Manager:Loan                           |
++-------------------------------------------------+
+1 row in set (0.00 sec)
+
+
+Q2. 101:Raju Sharma:Manager:Loan
+
+mysql> SELECT CONCAT_WS(':',emp_id,CONCAT(name,' ',lastname),designation,dept) FROM employees WHERE emp_id=101;
++------------------------------------------------------------------+
+| CONCAT_WS(':',emp_id,CONCAT(name,' ',lastname),designation,dept) |
++------------------------------------------------------------------+
+| 101:Raju Sharma:Manager:Loan                                     |
++------------------------------------------------------------------+
+1 row in set (0.00 sec)
+
+
+Q3. 101:Raju:MANAGER:Loan
+
+mysql> SELECT CONCAT_WS(':',emp_id,name,UPPER(designation),dept) FROM employees WHERE emp_id=101;
++----------------------------------------------------+
+| CONCAT_WS(':',emp_id,name,UPPER(designation),dept) |
++----------------------------------------------------+
+| 101:Raju:MANAGER:Loan                              |
++----------------------------------------------------+
+1 row in set (0.00 sec)
+
+
+Q4. L101 Raju
+    C103 Paul
+
+mysql> SELECT CONCAT(SUBSTRING(dept,1,1),emp_id),name from employees limit 2;
++------------------------------------+------+
+| CONCAT(SUBSTRING(dept,1,1),emp_id) | name |
++------------------------------------+------+
+| L101                               | Raju |
+| I103                               | Paul |
++------------------------------------+------+
+2 rows in set (0.00 sec)
+
+
+
+
+
+************************************************************************************************************************************************************************
+*                             *
+* 19. Distinct Keyword        * * To retrieve unique values from column.
+*                             * * Can retieve multiple column
+*******************************
+
+Data:
+
+mysql> select * from employees;
++--------+--------+-------------+------------+-----------+
+| emp_id | name   | designation | dept       | lastname  |
++--------+--------+-------------+------------+-----------+
+|    101 | Raju   | Manager     | Loan       | Sharma    |
+|    103 | Paul   | Associate   | IT         | Verma     |
+|    104 | Alex   | Accountant  | Account    | Rajput    |
+|    105 | Victor | Associate   | Deposit    | Corse     |
+|    106 | Akshay | Manager     | IT         | kadam     |
+|    107 | Pravin | Lead        | IT         | Gartadkar |
+|    108 | Mayur  | Cashier     | Account    | Wankhede  |
+|    109 | Vishu  | Lead        | Deposit    | Rick      |
+|    110 | Shan   | Peon        | Staff      | Patil     |
+|    111 | Manish | Associate   | Operations | Patil     |
++--------+--------+-------------+------------+-----------+
+10 rows in set (0.00 sec)
+
+
+Unique designation:
+
+mysql> SELECT DISTINCT designation FROM employees;
++-------------+
+| designation |
++-------------+
+| Manager     |
+| Associate   |
+| Accountant  |
+| Lead        |
+| Cashier     |
+| Peon        |
++-------------+
+6 rows in set (0.00 sec)
+
+
+Unique dept:
+mysql> SELECT DISTINCT dept FROM employees;
++------------+
+| dept       |
++------------+
+| Loan       |
+| IT         |
+| Account    |
+| Deposit    |
+| Staff      |
+| Operations |
++------------+
+6 rows in set (0.00 sec)
+
+
+************************************************************************************************************************************************************************
+*                             *
+* 18. Order by                * * Use for sorting
+*                             *
+*******************************
+Syntax: SELECT * FROM employees ORDER BY name;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+************************************************************************************************************************************************************************
+*                             *
+* 18. String Functions        *
+*                             *
+*******************************
+************************************************************************************************************************************************************************
+*                             *
+* 18. String Functions        *
+*                             *
+*******************************
