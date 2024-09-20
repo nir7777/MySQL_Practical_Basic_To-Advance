@@ -1056,17 +1056,163 @@ mysql> SELECT DISTINCT dept FROM employees;
 
 ************************************************************************************************************************************************************************
 *                             *
-* 18. Order by                * * Use for sorting
+* 20. Order by                * * Use for sorting
 *                             *
 *******************************
-Syntax: SELECT * FROM employees ORDER BY name;
+Syntax: SELECT * FROM table_name ORDER BY column_name;
+Ascending sorting:
+
+mysql> SELECT * FROM employees ORDER BY name;
++--------+--------+-------------+------------+-----------+
+| emp_id | name   | designation | dept       | lastname  |
++--------+--------+-------------+------------+-----------+
+|    106 | Akshay | Manager     | IT         | kadam     |
+|    104 | Alex   | Accountant  | Account    | Rajput    |
+|    111 | Manish | Associate   | Operations | Patil     |
+|    108 | Mayur  | Cashier     | Account    | Wankhede  |
+|    103 | Paul   | Associate   | IT         | Verma     |
+|    107 | Pravin | Lead        | IT         | Gartadkar |
+|    101 | Raju   | Manager     | Loan       | Sharma    |
+|    110 | Shan   | Peon        | Staff      | Patil     |
+|    105 | Victor | Associate   | Deposit    | Corse     |
+|    109 | Vishu  | Lead        | Deposit    | Rick      |
++--------+--------+-------------+------------+-----------+
+10 rows in set (0.00 sec)
+
+Descending Sorting:
+
+mysql> SELECT * FROM employees ORDER BY name DESC;
++--------+--------+-------------+------------+-----------+
+| emp_id | name   | designation | dept       | lastname  |
++--------+--------+-------------+------------+-----------+
+|    109 | Vishu  | Lead        | Deposit    | Rick      |
+|    105 | Victor | Associate   | Deposit    | Corse     |
+|    110 | Shan   | Peon        | Staff      | Patil     |
+|    101 | Raju   | Manager     | Loan       | Sharma    |
+|    107 | Pravin | Lead        | IT         | Gartadkar |
+|    103 | Paul   | Associate   | IT         | Verma     |
+|    108 | Mayur  | Cashier     | Account    | Wankhede  |
+|    111 | Manish | Associate   | Operations | Patil     |
+|    104 | Alex   | Accountant  | Account    | Rajput    |
+|    106 | Akshay | Manager     | IT         | kadam     |
++--------+--------+-------------+------------+-----------+
+10 rows in set (0.00 sec)
+
+
+Sorting 2 Columns:
+
+
+mysql> SELECT dept,name FROM employees ORDER BY dept,name;
++------------+--------+
+| dept       | name   |
++------------+--------+
+| Account    | Alex   |
+| Account    | Mayur  |
+| Deposit    | Victor |
+| Deposit    | Vishu  |
+| IT         | Akshay |
+| IT         | Paul   |
+| IT         | Pravin |
+| Loan       | Raju   |
+| Operations | Manish |
+| Staff      | Shan   |
++------------+--------+
+10 rows in set (0.00 sec)
 
 
 
 
+************************************************************************************************************************************************************************
+*                             *
+* 21. LIKE Keyword            *
+*                             *
+*******************************
+
+mysql> SELECT * FROM employees WHERE designation LIKE "%CASh%";
++--------+-------+-------------+---------+----------+
+| emp_id | name  | designation | dept    | lastname |
++--------+-------+-------------+---------+----------+
+|    108 | Mayur | Cashier     | Account | Wankhede |
++--------+-------+-------------+---------+----------+
+1 row in set (0.00 sec)
+
+
+*********************************************************
+
+If we want only names having size 4 character:
+
+mysql> SELECT * FROM employees WHERE designation LIKE "C%";
++--------+-------+-------------+---------+----------+
+| emp_id | name  | designation | dept    | lastname |
++--------+-------+-------------+---------+----------+
+|    108 | Mayur | Cashier     | Account | Wankhede |
++--------+-------+-------------+---------+----------+
+1 row in set (0.00 sec)
+
+*********************************************************
+mysql> SELECT * FROM employees WHERE dept LIKE "%rat%";
++--------+--------+-------------+------------+----------+
+| emp_id | name   | designation | dept       | lastname |
++--------+--------+-------------+------------+----------+
+|    111 | Manish | Associate   | Operations | Patil    |
++--------+--------+-------------+------------+----------+
+1 row in set (0.00 sec)
+
+
+*********************************************************
+mysql> SELECT * FROM employees WHERE dept LIKE "%t";
++--------+--------+-------------+---------+-----------+
+| emp_id | name   | designation | dept    | lastname  |
++--------+--------+-------------+---------+-----------+
+|    103 | Paul   | Associate   | IT      | Verma     |
+|    104 | Alex   | Accountant  | Account | Rajput    |
+|    105 | Victor | Associate   | Deposit | Corse     |
+|    106 | Akshay | Manager     | IT      | kadam     |
+|    107 | Pravin | Lead        | IT      | Gartadkar |
+|    108 | Mayur  | Cashier     | Account | Wankhede  |
+|    109 | Vishu  | Lead        | Deposit | Rick      |
++--------+--------+-------------+---------+-----------+
+7 rows in set (0.00 sec)
+
+
+*********************************************************
+
+mysql> SELECT * FROM employees WHERE name LIKE "____" ;
++--------+------+-------------+---------+----------+
+| emp_id | name | designation | dept    | lastname |
++--------+------+-------------+---------+----------+
+|    101 | Raju | Manager     | Loan    | Sharma   |
+|    103 | Paul | Associate   | IT      | Verma    |
+|    104 | Alex | Accountant  | Account | Rajput   |
+|    110 | Shan | Peon        | Staff   | Patil    |
++--------+------+-------------+---------+----------+
+4 rows in set (0.00 sec)
 
 
 
+*********************************************************
+
+If we want only names having size 7 character:
+mysql> SELECT * FROM employees WHERE designation LIKE "_______" ;
++--------+--------+-------------+---------+----------+
+| emp_id | name   | designation | dept    | lastname |
++--------+--------+-------------+---------+----------+
+|    101 | Raju   | Manager     | Loan    | Sharma   |
+|    106 | Akshay | Manager     | IT      | kadam    |
+|    108 | Mayur  | Cashier     | Account | Wankhede |
++--------+--------+-------------+---------+----------+
+3 rows in set (0.00 sec)
+
+*****************************************************************
+
+mysql> SELECT * FROM employees WHERE designation LIKE "M______" ;
++--------+--------+-------------+------+----------+
+| emp_id | name   | designation | dept | lastname |
++--------+--------+-------------+------+----------+
+|    101 | Raju   | Manager     | Loan | Sharma   |
+|    106 | Akshay | Manager     | IT   | kadam    |
++--------+--------+-------------+------+----------+
+2 rows in set (0.00 sec)
 
 
 
@@ -1078,11 +1224,1585 @@ Syntax: SELECT * FROM employees ORDER BY name;
 
 ************************************************************************************************************************************************************************
 *                             *
-* 18. String Functions        *
+* 22. Limit                   *
 *                             *
 *******************************
+Added new column SALARY in previous data:
+mysql> ALTER TABLE employees ADD COLUMN SALARY INT NOT NULL DEFAULT 25000;
+Query OK, 0 rows affected (0.10 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+
+mysql> SELECT * FROM employees;
++--------+--------+-------------+------------+-----------+--------+
+| emp_id | name   | designation | dept       | lastname  | SALARY |
++--------+--------+-------------+------------+-----------+--------+
+|    101 | Raju   | Manager     | Loan       | Sharma    |  25000 |
+|    103 | Paul   | Associate   | IT         | Verma     |  25000 |
+|    104 | Alex   | Accountant  | Account    | Rajput    |  25000 |
+|    105 | Victor | Associate   | Deposit    | Corse     |  25000 |
+|    106 | Akshay | Manager     | IT         | kadam     |  25000 |
+|    107 | Pravin | Lead        | IT         | Gartadkar |  25000 |
+|    108 | Mayur  | Cashier     | Account    | Wankhede  |  25000 |
+|    109 | Vishu  | Lead        | Deposit    | Rick      |  25000 |
+|    110 | Shan   | Peon        | Staff      | Patil     |  25000 |
+|    111 | Manish | Associate   | Operations | Patil     |  25000 |
++--------+--------+-------------+------------+-----------+--------+
+10 rows in set (0.00 sec)
+
+mysql> SELECT * FROM employees LIMIt 4;
++--------+--------+-------------+---------+----------+--------+
+| emp_id | name   | designation | dept    | lastname | SALARY |
++--------+--------+-------------+---------+----------+--------+
+|    101 | Raju   | Manager     | Loan    | Sharma   |  25000 |
+|    103 | Paul   | Associate   | IT      | Verma    |  25000 |
+|    104 | Alex   | Accountant  | Account | Rajput   |  25000 |
+|    105 | Victor | Associate   | Deposit | Corse    |  25000 |
++--------+--------+-------------+---------+----------+--------+
+4 rows in set (0.00 sec)
+
+Finding highest salary using limit and order by:
+
+mysql> SELECT * FROM employees ORDER BY SALARY DESC LIMIT 1;
++--------+--------+-------------+------+-----------+--------+
+| emp_id | name   | designation | dept | lastname  | SALARY |
++--------+--------+-------------+------+-----------+--------+
+|    107 | Pravin | Lead        | IT   | Gartadkar |  70000 |
++--------+--------+-------------+------+-----------+--------+
+1 row in set (0.01 sec)
+S
+
+
+
 ************************************************************************************************************************************************************************
 *                             *
-* 18. String Functions        *
+* 23. Count Functions         *
 *                             *
 *******************************
+
+1. count Function;
+
+To check number of records in a table:
+
+mysql> SELECT COUNT(*) FROM EMPLOYEES;
++----------+
+| COUNT(*) |
++----------+
+|       10 |
++----------+
+1 row in set (0.04 sec)
+
+Using DISTINCT and COUNT together:
+
+mysql> SELECT COUNT(DISTINCT dept) FROM EMPLOYEES;
++----------------------+
+| COUNT(DISTINCT dept) |
++----------------------+
+|                    6 |
++----------------------+
+1 row in set (0.00 sec)
+
+Using count with WHERE condition.
+
+mysql> SELECT COUNT(dept) FROM employees WHERE dept = 'IT';
++-------------+
+| COUNT(dept) |
++-------------+
+|           3 |
++-------------+
+1 row in set (0.01 sec)
+
+
+Count number of Manager in table:
+
+mysql> SELECT COUNT(designation) FROM employees WHERE designation = 'Manager';
++--------------------+
+| COUNT(designation) |
++--------------------+
+|                  2 |
++--------------------+
+1 row in set (0.00 sec)
+
+
+
+
+************************************************************************************************************************************************************************
+*                             *
+*  Excercise 04               *
+*                             *
+*******************************
+
+mysql> SELECT * FROM employees;
++--------+--------+-------------+------------+-----------+--------+
+| emp_id | name   | designation | dept       | lastname  | SALARY |
++--------+--------+-------------+------------+-----------+--------+
+|    101 | Raju   | Manager     | Loan       | Sharma    |  25000 |
+|    103 | Paul   | Associate   | IT         | Verma     |  25000 |
+|    104 | Alex   | Accountant  | Account    | Rajput    |  25000 |
+|    105 | Victor | Associate   | Deposit    | Corse     |  25000 |
+|    106 | Akshay | Manager     | IT         | kadam     |  25000 |
+|    107 | Pravin | Lead        | IT         | Gartadkar |  25000 |
+|    108 | Mayur  | Cashier     | Account    | Wankhede  |  25000 |
+|    109 | Vishu  | Lead        | Deposit    | Rick      |  25000 |
+|    110 | Shan   | Peon        | Staff      | Patil     |  25000 |
+|    111 | Manish | Associate   | Operations | Patil     |  25000 |
++--------+--------+-------------+------------+-----------+--------+
+10 rows in set (0.00 sec)
+
+
+Q1. Find different types of departments in table:
+
+mysql> SELECT DISTINCT(dept) FROM employees;
++------------+
+| dept       |
++------------+
+| Loan       |
+| IT         |
+| Account    |
+| Deposit    |
+| Staff      |
+| Operations |
++------------+
+6 rows in set (0.00 sec)
+
+*************************************************************************
+
+Q2. Display records with high to low salary:
+
+mysql> SELECT * FROM employees ORDER BY SALARY DESC;
++--------+--------+-------------+------------+-----------+--------+
+| emp_id | name   | designation | dept       | lastname  | SALARY |
++--------+--------+-------------+------------+-----------+--------+
+|    107 | Pravin | Lead        | IT         | Gartadkar |  70000 |
+|    110 | Shan   | Peon        | Staff      | Patil     |  70000 |
+|    106 | Akshay | Manager     | IT         | kadam     |  50000 |
+|    104 | Alex   | Accountant  | Account    | Rajput    |  45000 |
+|    108 | Mayur  | Cashier     | Account    | Wankhede  |  45000 |
+|    111 | Manish | Associate   | Operations | Patil     |  45000 |
+|    101 | Raju   | Manager     | Loan       | Sharma    |  30000 |
+|    105 | Victor | Associate   | Deposit    | Corse     |  30000 |
+|    109 | Vishu  | Lead        | Deposit    | Rick      |  30000 |
+|    103 | Paul   | Associate   | IT         | Verma     |  25000 |
++--------+--------+-------------+------------+-----------+--------+
+10 rows in set (0.00 sec)
+
+
+************************************************************************
+
+Q3. How to see only top 3 records from a table?
+
+mysql> SELECT * FROM employees LIMIT 3:
++--------+------+-------------+---------+----------+--------+
+| emp_id | name | designation | dept    | lastname | SALARY |
++--------+------+-------------+---------+----------+--------+
+|    101 | Raju | Manager     | Loan    | Sharma   |  30000 |
+|    103 | Paul | Associate   | IT      | Verma    |  25000 |
+|    104 | Alex | Accountant  | Account | Rajput   |  45000 |
++--------+------+-------------+---------+----------+--------+
+3 rows in set (0.00 sec)
+
+
+***************************************************************************
+
+Q4. Show records where first name start with letter 'A':
+
+mysql> SELECT * FROM employees WHERE name LIKE "A%";
++--------+--------+-------------+---------+----------+--------+
+| emp_id | name   | designation | dept    | lastname | SALARY |
++--------+--------+-------------+---------+----------+--------+
+|    104 | Alex   | Accountant  | Account | Rajput   |  45000 |
+|    106 | Akshay | Manager     | IT      | kadam    |  50000 |
++--------+--------+-------------+---------+----------+--------+
+2 rows in set (0.00 sec)
+
+
+**********************************************************************
+
+Q5. Show records where length of the lname is 4 character:
+
+mysql> SELECT * FROM employees WHERE lastname LIKE "____";
++--------+-------+-------------+---------+----------+--------+
+| emp_id | name  | designation | dept    | lastname | SALARY |
++--------+-------+-------------+---------+----------+--------+
+|    109 | Vishu | Lead        | Deposit | Rick     |  30000 |
++--------+-------+-------------+---------+----------+--------+
+1 row in set (0.00 sec)
+
+ 
+*************************************************************************************************************************************************************************
+*                             *
+*  24.Group By Clause         *
+*                             *
+*******************************
+
+
+
+mysql> SELECT dept FROM employees GROUP BY dept;
++------------+
+| dept       |
++------------+
+| Loan       |
+| IT         |
+| Account    |
+| Deposit    |
+| Staff      |
+| Operations |
++------------+
+6 rows in set (0.00 sec)
+
+mysql> SELECT dept, COUNT(emp_id) FROM employees GROUP BY dept;
++------------+---------------+
+| dept       | COUNT(emp_id) |
++------------+---------------+
+| Loan       |             1 |
+| IT         |             3 |
+| Account    |             2 |
+| Deposit    |             2 |
+| Staff      |             1 |
+| Operations |             1 |
++------------+---------------+
+6 rows in set (0.00 sec)
+
+
+Q.Group employees by designation and check number of employee having same designation.
+
+mysql> SELECT designation, COUNT(emp_id) FROM employees GROUP BY designation;
++-------------+---------------+
+| designation | COUNT(emp_id) |
++-------------+---------------+
+| Manager     |             2 |
+| Associate   |             3 |
+| Accountant  |             1 |
+| Lead        |             2 |
+| Cashier     |             1 |
+| Peon        |             1 |
++-------------+---------------+
+6 rows in set (0.00 sec)
+
+Q. Display number of employees having same salary group by salary.
+
+mysql> SELECT SALARY,COUNT(emp_id)  FROM employees GROUP BY SALARY;
++--------+---------------+
+| SALARY | COUNT(emp_id) |
++--------+---------------+
+|  30000 |             3 |
+|  25000 |             1 |
+|  45000 |             3 |
+|  50000 |             1 |
+|  70000 |             2 |
++--------+---------------+
+5 rows in set (0.00 sec)
+
+
+
+
+*************************************************************************************************************************************************************************
+*                             *
+*  25. Max Function           *
+*                             *
+*******************************
+
+
+
+mysql> SELECT MAX(SALARY) FROM employees;
++-------------+
+| MAX(SALARY) |
++-------------+
+|       70000 |
++-------------+
+1 row in set (0.00 sec)
+
+
+Using with String Columns: returns highest alphabet.
+
+mysql> SELECT MAX(name) FROM employees;
++-----------+
+| MAX(name) |
++-----------+
+| Vishu     |
++-----------+
+1 row in set (0.00 sec)
+
+*************************************************************************************************************************************************************************
+*                             *
+*  26. Min                    *
+*                             *
+*******************************
+
+
+
+mysql> SELECT MIN(SALARY) FROM employees;
++-------------+
+| MIN(SALARY) |
++-------------+
+|       25000 |
++-------------+
+1 row in set (0.00 sec)
+
+
+Using with String Columns: returns lowest alphabet.
+
+mysql> SELECT MIN(name) FROM employees;
++-----------+
+| MIN(name) |
++-----------+
+| Akshay    |
++-----------+
+1 row in set (0.00 sec)
+
+*************************************************************************************************************************************************************************
+*                             *
+*  27. Subqueries             * First bracket query will get executed then 
+*                             * other Query will get execute.
+*******************************
+
+Find highest salary and display the details of that employees:
+
+mysql> SELECT * FROM employees WHERE SALARY=(SELECT MAX(SALARY) FROM employees);
++--------+--------+-------------+-------+-----------+--------+
+| emp_id | name   | designation | dept  | lastname  | SALARY |
++--------+--------+-------------+-------+-----------+--------+
+|    107 | Pravin | Lead        | IT    | Gartadkar |  70000 |
+|    110 | Shan   | Peon        | Staff | Patil     |  70000 |
++--------+--------+-------------+-------+-----------+--------+
+2 rows in set (0.01 sec)
+
+
+
+
+*************************************************************************************************************************************************************************
+*                             *
+*  28. SUM                    *
+*                             *
+*******************************
+
+
+mysql> SELECT SUM(SALARY) FROM employees;
++-------------+
+| SUM(SALARY) |
++-------------+
+|      440000 |
++-------------+
+1 row in set (0.00 sec)
+
+
+mysql> SELECT  dept, SUM(SALARY),COUNT(emp_id) FROM employees GROUP BY dept;
++------------+-------------+---------------+
+| dept       | SUM(SALARY) | COUNT(emp_id) |
++------------+-------------+---------------+
+| Loan       |       30000 |             1 |
+| IT         |      145000 |             3 |
+| Account    |       90000 |             2 |
+| Deposit    |       60000 |             2 |
+| Staff      |       70000 |             1 |
+| Operations |       45000 |             1 |
++------------+-------------+---------------+
+6 rows in set (0.00 sec)
+
+
+
+*************************************************************************************************************************************************************************
+*                             *
+*  29. AVG                    *
+*                             *
+*******************************
+
+
+mysql> SELECT AVG(SALARY) FROM employees;
++-------------+
+| AVG(SALARY) |
++-------------+
+|  44000.0000 |
++-------------+
+1 row in set (0.00 sec)
+
+mysql> SELECT  dept, AVG(SALARY) FROM employees GROUP BY dept;
++------------+-------------+
+| dept       | AVG(SALARY) |
++------------+-------------+
+| Loan       |  30000.0000 |
+| IT         |  48333.3333 |
+| Account    |  45000.0000 |
+| Deposit    |  30000.0000 |
+| Staff      |  70000.0000 |
+| Operations |  45000.0000 |
++------------+-------------+
+6 rows in set (0.04 sec)
+
+
+
+*************************************************************************************************************************************************************************
+*                             *
+*     Exercise 05             *
+*                             *
+*******************************
+
+
+Q1. Find total number of employees in database:
+
+mysql> SELECT COUNT(emp_id) FROM employees;
++---------------+
+| COUNT(emp_id) |
++---------------+
+|            10 |
++---------------+
+1 row in set (0.04 sec)
+
+
+Q2. Find number of employees in each department:
+
+mysql> SELECT dept, COUNT(emp_id) FROM employees GROUP BY dept;
++------------+---------------+
+| dept       | COUNT(emp_id) |
++------------+---------------+
+| Loan       |             1 |
+| IT         |             3 |
+| Account    |             2 |
+| Deposit    |             2 |
+| Staff      |             1 |
+| Operations |             1 |
++------------+---------------+
+6 rows in set (0.00 sec)
+
+
+Q3. Find Lowest salary paying:
+
+mysql> SELECT MIN(SALARY) FROM employees;
++-------------+
+| MIN(SALARY) |
++-------------+
+|       25000 |
++-------------+
+1 row in set (0.00 sec)
+
+mysql> SELECT * FROM employees WHERE SALARY=(SELECT MIN(SALARY) FROM employees);
++--------+------+-------------+------+----------+--------+
+| emp_id | name | designation | dept | lastname | SALARY |
++--------+------+-------------+------+----------+--------+
+|    103 | Paul | Associate   | IT   | Verma    |  25000 |
++--------+------+-------------+------+----------+--------+
+1 row in set (0.00 sec)
+
+
+Q4. Find Highest salary paying:
+
+mysql> SELECT MAX(SALARY) FROM employees;
++-------------+
+| MAX(SALARY) |
++-------------+
+|       70000 |
++-------------+
+1 row in set (0.00 sec)
+
+mysql> SELECT * FROM employees WHERE SALARY=(SELECT MAX(SALARY) FROM employees);
++--------+--------+-------------+-------+-----------+--------+
+| emp_id | name   | designation | dept  | lastname  | SALARY |
++--------+--------+-------------+-------+-----------+--------+
+|    107 | Pravin | Lead        | IT    | Gartadkar |  70000 |
+|    110 | Shan   | Peon        | Staff | Patil     |  70000 |
++--------+--------+-------------+-------+-----------+--------+
+2 rows in set (0.00 sec)
+
+
+Q5. Find total salary paying in IT department:
+
+mysql> SELECT SUM(SALARY) FROM employees WHERE dept= 'IT';
++-------------+
+| SUM(SALARY) |
++-------------+
+|      145000 |
++-------------+
+1 row in set (0.00 sec)
+
+
+Q6. Average Salary Paying in each department:
+
+mysql> SELECT dept, AVG(SALARY) FROM employees GROUP BY dept;
++------------+-------------+
+| dept       | AVG(SALARY) |
++------------+-------------+
+| Loan       |  30000.0000 |
+| IT         |  48333.3333 |
+| Account    |  45000.0000 |
+| Deposit    |  30000.0000 |
+| Staff      |  70000.0000 |
+| Operations |  45000.0000 |
++------------+-------------+
+6 rows in set (0.00 sec)
+
+
+
+
+*************************************************************************************************************************************************************************
+*                             *
+*   30. Decimal Datatype      *
+*                             * 
+******************************* 
+ # In INT datatype we can not store flot value there we use decimal type.
+ # Max number of digits for DECIMAL is 65.
+
+ # e.g DECIMAL(5,2): Here 5 is Total Digits including digits after decimal.
+                  2 is digits after decimal point.
+ # The total digits in whole price should be 5 
+
+mysql>
+mysql> CREATE TABLE dec_num( price DECIMAL(5,2));
+Query OK, 0 rows affected (0.07 sec)
+
+mysql> DESC dec_num;
++-------+--------------+------+-----+---------+-------+
+| Field | Type         | Null | Key | Default | Extra |
++-------+--------------+------+-----+---------+-------+
+| price | decimal(5,2) | YES  |     | NULL    |       |
++-------+--------------+------+-----+---------+-------+
+1 row in set (0.02 sec)
+
+mysql> INSERT INTO dec_num VALUES(123.12);
+Query OK, 1 row affected (0.02 sec)
+
+mysql> INSERT INTO dec_num VALUES(12.123);
+Query OK, 1 row affected, 1 warning (0.01 sec)
+
+mysql> INSERT INTO dec_num VALUES(12.12);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> SELECT * FROM dec_num;
++--------+
+| price  |
++--------+
+| 556.22 |
+| 123.12 |
+|   1.1  |
+|  12.12 |
+|  12.12 |
++--------+
+5 rows in set (0.00 sec)
+
+
+
+
+*************************************************************************************************************************************************************************
+*                             *
+*   31. Float Datatype        *
+*                             *
+*******************************
+Float: upto 7 digits, takes 4 bytes of memory
+
+
+
+
+*************************************************************************************************************************************************************************
+*                             *
+*   32. Double datatype       *
+*                             *
+*******************************
+Double: upto 15 digits, takes 8 bytes of memory
+
+
+mysql> CREATE TABLE FLO_DOUB(f_value FLOAT, d_value DOUBLE);
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> DESC FLO_DOUB;
++---------+--------+------+-----+---------+-------+
+| Field   | Type   | Null | Key | Default | Extra |
++---------+--------+------+-----+---------+-------+
+| f_value | float  | YES  |     | NULL    |       |
+| d_value | double | YES  |     | NULL    |       |
++---------+--------+------+-----+---------+-------+
+2 rows in set (0.02 sec)
+
+mysql> INSERT INTO FLO_DOUB VALUES(123.456, 123.456);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO FLO_DOUB VALUES(123.123456789, 123.123456789);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO FLO_DOUB VALUES(123.123456789101112, 123.12345678910111213);
+
+mysql> SELECT * FROM FLO_DOUB;
++---------+--------------------+
+| f_value | d_value            |
++---------+--------------------+
+| 123.456 |            123.456 |
+| 123.123 |      123.123456789 |
+| 123.123 | 123.12345678910111 |
++---------+--------------------+
+3 rows in set (0.00 sec)
+
+
+
+
+*************************************************************************************************************************************************************************
+*                             *
+*   33. Date Time Datatype    *
+*                             *
+*******************************
+
+1. DATE     : format: yyyy-mm-dd
+2. TIME     : format: HH:MM:SS 
+3. DATETIME : format: 'yyyy-mm-dd HH:MM:SS'
+
+
+mysql> CREATE TABLE person(
+    -> jd DATE,
+    -> jt TIME,
+    -> jdt DATETIME);
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> DESC person;
++-------+----------+------+-----+---------+-------+
+| Field | Type     | Null | Key | Default | Extra |
++-------+----------+------+-----+---------+-------+
+| jd    | date     | YES  |     | NULL    |       |
+| jt    | time     | YES  |     | NULL    |       |
+| jdt   | datetime | YES  |     | NULL    |       |
++-------+----------+------+-----+---------+-------+
+3 rows in set (0.01 sec)
+
+mysql> SELECT * FROM person;
++------------+----------+---------------------+
+| jd         | jt       | jdt                 |
++------------+----------+---------------------+
+| 1997-04-21 | 12:05:12 | 1997-04-21 12:05:12 |
++------------+----------+---------------------+
+1 row in set (0.00 sec)
+
+
+
+
+*************************************************************************************************************************************************************************
+*                             *
+*     34. DATETIME Functions  *
+*                             *
+*******************************
+
+1. CURDATE() : yyyy-mm-dd
+mysql> SELECT CURDATE();
++------------+
+| CURDATE()  |
++------------+
+| 2024-09-20 |
++------------+
+1 row in set (0.01 sec)
+
+2. CURTIME() : hh:mm:SS
+mysql> SELECT CURTIME();
++-----------+
+| CURTIME() |
++-----------+
+| 12:33:29  |
++-----------+
+1 row in set (0.01 sec)
+
+3. NOW() : yyyy-mm-dd hh:mm:SS
+mysql> SELECT NOW();
++---------------------+
+| NOW()               |
++---------------------+
+| 2024-09-20 12:33:33 |
++---------------------+
+1 row in set (0.00 sec)
+
+Suppose a person joined today lets add his record to our person table:
+
+mysql> INSERT INTO person VALUES(CURDATE(), CURTIME(), NOW());
+Query OK, 1 row affected (0.00 sec)
+
+mysql> SELECT * FROM person;
++------------+----------+---------------------+
+| jd         | jt       | jdt                 |
++------------+----------+---------------------+
+| 1997-04-21 | 12:05:12 | 1997-04-21 12:05:12 |
+| 2024-09-20 | 12:35:39 | 2024-09-20 12:35:39 |
++------------+----------+---------------------+
+2 rows in set (0.00 sec)
+
+
+4. DAYNAME(): 
+mysql> SELECT DAYNAME('1997-04-21');
++-----------------------+
+| DAYNAME('1997-04-21') |
++-----------------------+
+| Monday                |
++-----------------------+
+1 row in set (0.00 sec)
+
+5. DAYOFMONTH():
+mysql> SELECT DAYOFMONTH('1997-04-21');
++--------------------------+
+| DAYOFMONTH('1997-04-21') |
++--------------------------+
+|                       21 |
++--------------------------+
+1 row in set (0.00 sec)
+
+6. DAYOFWEEK():
+mysql> SELECT DAYOFWEEK('1997-04-21');
++-------------------------+
+| DAYOFWEEK('1997-04-21') |
++-------------------------+
+|                       2 |
++-------------------------+
+1 row in set (0.00 sec) 
+
+7. MONTHNAME():
+mysql> SELECT MONTHNAME('1997-04-21');
++-------------------------+
+| MONTHNAME('1997-04-21') |
++-------------------------+
+| April                   |
++-------------------------+
+1 row in set (0.01 sec)
+
+Using functions with person table:
+mysql> SELECT jd, MONTHNAME(jd) FROM person;
++------------+---------------+
+| jd         | MONTHNAME(jd) |
++------------+---------------+
+| 1997-04-21 | April         |
+| 2024-09-20 | September     |
++------------+---------------+
+2 rows in set (0.00 sec)
+
+
+8. HOUR():
+mysql> SELECT HOUR('15:03:56');
++------------------+
+| HOUR('15:03:56') |
++------------------+
+|               15 |
++------------------+
+1 row in set (0.00 sec)
+
+
+mysql> SELECT jt, HOUR(jt) FROM person;
++----------+----------+
+| jt       | HOUR(jt) |
++----------+----------+
+| 12:05:12 |       12 |
+| 12:35:39 |       12 |
++----------+----------+
+2 rows in set (0.00 sec)
+
+
+9. MINUTE():
+mysql> SELECT MINUTE('15:03:56');
++--------------------+
+| MINUTE('15:03:56') |
++--------------------+
+|                  3 |
++--------------------+
+1 row in set (0.00 sec)
+
+
+mysql> SELECT jt, MINUTE(jt) FROM person;
++----------+------------+
+| jt       | MINUTE(jt) |
++----------+------------+
+| 12:05:12 |          5 |
+| 12:35:39 |         35 |
++----------+------------+
+2 rows in set (0.00 sec)
+
+
+10. DATE_FORMAT(Date, Format):
+
+# Suppose we need to get date in a given format like,
+  Tue Mar 28th
+  21st Tue at 21:20:28
+  2023/04/18
+
+  DATE_FORMAT(now(), '%D %a at %T')
+
+  DATE_FORMAT(now(), '%m/%d/%y')
+
+mysql> SELECT DATE_FORMAT(now(),'%D %a at %T');
++----------------------------------+
+| DATE_FORMAT(now(),'%D %a at %T') |
++----------------------------------+
+| 20th Fri at 16:19:15             |
++----------------------------------+
+1 row in set (0.01 sec)
+
+# USing with table
+
+mysql> SELECT jdt, DATE_FORMAT(jdt, '%D %a at %k') FROM person;
++---------------------+---------------------------------+
+| jdt                 | DATE_FORMAT(jdt, '%D %a at %k') |
++---------------------+---------------------------------+
+| 1997-04-21 12:05:12 | 21st Mon at 12                  |
+| 2024-09-20 12:35:39 | 20th Fri at 12                  |
++---------------------+---------------------------------+
+2 rows in set (0.00 sec)
+
+
+ DATE Maths:
+
+11. DATEDIFF(expr1, expr2)
+
+mysql> SELECT DATEDIFF('2023-04-20', '2023-04-10');
++--------------------------------------+
+| DATEDIFF('2023-04-20', '2023-04-10') |
++--------------------------------------+
+|                                   10 |
++--------------------------------------+
+1 row in set (0.00 sec)
+
+
+12. DATE_ADD(date, INTERVAL expr unit)
+
+mysql> SELECT DATE_ADD(NOW(),INTERVAL 1 YEAR);
++---------------------------------+
+| DATE_ADD(NOW(),INTERVAL 1 YEAR) |
++---------------------------------+
+| 2025-09-20 16:43:57             |
++---------------------------------+
+1 row in set (0.00 sec)
+
+
+mysql> SELECT DATE_ADD(NOW(),INTERVAL 1 MONTH);
++----------------------------------+
+| DATE_ADD(NOW(),INTERVAL 1 MONTH) |
++----------------------------------+
+| 2024-10-20 16:44:36              |
++----------------------------------+
+1 row in set (0.00 sec)
+
+13. DATE_SUB(date, INTERVAL expr unit)
+
+mysql> SELECT DATE_SUB(NOW(),INTERVAL 1 MONTH);
++----------------------------------+
+| DATE_SUB(NOW(),INTERVAL 1 MONTH) |
++----------------------------------+
+| 2024-08-20 16:45:02              |
++----------------------------------+
+1 row in set (0.00 sec)
+
+
+14. TIMEDIFF(expr1, expr2) : 
+TIMEDIFF('20:00:00','18:00:00')
+mysql> SELECT TIMEDIFF('23:00:00', '20:00:00');
++----------------------------------+
+| TIMEDIFF('23:00:00', '20:00:00') |
++----------------------------------+
+| 03:00:00                         |
++----------------------------------+
+1 row in set (0.00 sec)
+
+15. TIMESTAMP():
+
+mysql> CREATE TABLE blogs(
+    -> blog VARCHAR(50),
+    -> ct DATETIME DEFAULT CURRENT_TIMESTAMP,
+    -> ut DATETIME ON UPDATE CURRENT_TIMESTAMP);
+Query OK, 0 rows affected (0.05 sec)
+
+mysql> DESC blogs;
++-------+-------------+------+-----+-------------------+-----------------------------+
+| Field | Type        | Null | Key | Default           | Extra                       |
++-------+-------------+------+-----+-------------------+-----------------------------+
+| blog  | varchar(50) | YES  |     | NULL              |                             |
+| ct    | datetime    | YES  |     | CURRENT_TIMESTAMP | DEFAULT_GENERATED           |
+| ut    | datetime    | YES  |     | NULL              | on update CURRENT_TIMESTAMP |
++-------+-------------+------+-----+-------------------+-----------------------------+
+3 rows in set (0.02 sec)
+
+
+mysql> INSERT INTO blogs (blog) VALUES('This is my 1st blog');
+Query OK, 1 row affected (0.02 sec)
+
+mysql> SELECT * FROM blogs;
++---------------------+---------------------+------+
+| blog                | ct                  | ut   |
++---------------------+---------------------+------+
+| This is my 1st blog | 2024-09-20 16:52:36 | NULL |
++---------------------+---------------------+------+
+1 row in set (0.00 sec)
+
+mysql> UPDATE blogs set blog='This is updated blog';
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> SELECT * FROM blogs;
++----------------------+---------------------+---------------------+
+| blog                 | ct                  | ut                  |
++----------------------+---------------------+---------------------+
+| This is updated blog | 2024-09-20 16:52:36 | 2024-09-20 16:54:00 |
++----------------------+---------------------+---------------------+
+1 row in set (0.00 sec)
+
+
+
+
+
+*************************************************************************************************************************************************************************
+*                             *
+*       Exercise 06           *
+*                             *
+*******************************
+
+Q1. Print the current time(HH:MM:SS)
+
+mysql> Select CURTIME();
++-----------+
+| CURTIME() |
++-----------+
+| 17:05:06  |
++-----------+
+1 row in set (0.00 sec)
+
+
+Q2. Print the current date(yyyy-mm-dd)
+
+mysql> Select CURDATE();
++------------+
+| CURDATE()  |
++------------+
+| 2024-09-20 |
++------------+
+1 row in set (0.00 sec)
+
+Q3. PRint Current Day of the Week(Monday, Tuesday)
+
+mysql> Select DAYNAME(CURDATE());
++--------------------+
+| DAYNAME(CURDATE()) |
++--------------------+
+| Friday             |
++--------------------+
+1 row in set (0.00 sec)
+
+Q4. Which datatype can be used to store value 123.456?
+==> Decimal
+
+Q5. Display Date in format:
+    dd:mm:yyyy
+mysql> SELECT DATE_FORMAT(CURDATE(), '%d:%c:%Y');
++------------------------------------+
+| DATE_FORMAT(CURDATE(), '%d:%c:%Y') |
++------------------------------------+
+| 20:9:2024                          |
++------------------------------------+
+1 row in set (0.00 sec)
+
+     April 22nd at 22:00:00
+
+ mysql> SELECT DATE_FORMAT(NOW(),'%b%D at %k');
++---------------------------------+
+| DATE_FORMAT(NOW(),'%b%D at %k') |
++---------------------------------+
+| Sep20th at 17                   |
++---------------------------------+
+1 row in set (0.00 sec)
+
+
+
+
+*************************************************************************************************************************************************************************
+*                             *
+*    35. Relational Operators *
+*                             *
+*******************************
+
+1. > Greater Than:
+
+mysql> SELECT * FROM employees WHERE SALARY>65000;
++--------+--------+-------------+-------+-----------+--------+
+| emp_id | name   | designation | dept  | lastname  | SALARY |
++--------+--------+-------------+-------+-----------+--------+
+|    107 | Pravin | Lead        | IT    | Gartadkar |  70000 |
+|    110 | Shan   | Peon        | Staff | Patil     |  70000 |
++--------+--------+-------------+-------+-----------+--------+
+2 rows in set (0.00 sec)
+
+2. < Less Than:
+
+mysql> SELECT * FROM employees WHERE SALARY < 65000;
++--------+--------+-------------+------------+----------+--------+
+| emp_id | name   | designation | dept       | lastname | SALARY |
++--------+--------+-------------+------------+----------+--------+
+|    101 | Raju   | Manager     | Loan       | Sharma   |  30000 |
+|    103 | Paul   | Associate   | IT         | Verma    |  25000 |
+|    104 | Alex   | Accountant  | Account    | Rajput   |  45000 |
+|    105 | Victor | Associate   | Deposit    | Corse    |  30000 |
+|    106 | Akshay | Manager     | IT         | kadam    |  50000 |
+|    108 | Mayur  | Cashier     | Account    | Wankhede |  45000 |
+|    109 | Vishu  | Lead        | Deposit    | Rick     |  30000 |
+|    111 | Manish | Associate   | Operations | Patil    |  45000 |
++--------+--------+-------------+------------+----------+--------+
+8 rows in set (0.00 sec)
+
+
+3. <= Less Than equal to 
+
+mysql> SELECT * FROM employees WHERE SALARY <= 50000;
++--------+--------+-------------+------------+----------+--------+
+| emp_id | name   | designation | dept       | lastname | SALARY |
++--------+--------+-------------+------------+----------+--------+
+|    101 | Raju   | Manager     | Loan       | Sharma   |  30000 |
+|    103 | Paul   | Associate   | IT         | Verma    |  25000 |
+|    104 | Alex   | Accountant  | Account    | Rajput   |  45000 |
+|    105 | Victor | Associate   | Deposit    | Corse    |  30000 |
+|    106 | Akshay | Manager     | IT         | kadam    |  50000 |
+|    108 | Mayur  | Cashier     | Account    | Wankhede |  45000 |
+|    109 | Vishu  | Lead        | Deposit    | Rick     |  30000 |
+|    111 | Manish | Associate   | Operations | Patil    |  45000 |
++--------+--------+-------------+------------+----------+--------+
+8 rows in set (0.00 sec)
+
+
+4. >=  Greater Than equal to:
+
+mysql> SELECT * FROM employees WHERE SALARY >= 50000;
++--------+--------+-------------+-------+-----------+--------+
+| emp_id | name   | designation | dept  | lastname  | SALARY |
++--------+--------+-------------+-------+-----------+--------+
+|    106 | Akshay | Manager     | IT    | kadam     |  50000 |
+|    107 | Pravin | Lead        | IT    | Gartadkar |  70000 |
+|    110 | Shan   | Peon        | Staff | Patil     |  70000 |
++--------+--------+-------------+-------+-----------+--------+
+3 rows in set (0.00 sec)
+
+
+
+5. != Not Equal to:
+
+mysql> SELECT * FROM employees WHERE SALARY != 30000;
++--------+--------+-------------+------------+-----------+--------+
+| emp_id | name   | designation | dept       | lastname  | SALARY |
++--------+--------+-------------+------------+-----------+--------+
+|    103 | Paul   | Associate   | IT         | Verma     |  25000 |
+|    104 | Alex   | Accountant  | Account    | Rajput    |  45000 |
+|    106 | Akshay | Manager     | IT         | kadam     |  50000 |
+|    107 | Pravin | Lead        | IT         | Gartadkar |  70000 |
+|    108 | Mayur  | Cashier     | Account    | Wankhede  |  45000 |
+|    110 | Shan   | Peon        | Staff      | Patil     |  70000 |
+|    111 | Manish | Associate   | Operations | Patil     |  45000 |
++--------+--------+-------------+------------+-----------+--------+
+7 rows in set (0.00 sec)
+
+
+
+
+*************************************************************************************************************************************************************************
+*                             *
+*    35. Logical Operators    *
+*                             *
+*******************************
+
+1. AND operator:
+# When both conditions are true.
+
+mysql> SELECT * FROM employees WHERE SALARY = 30000 AND dept='Deposit';
++--------+--------+-------------+---------+----------+--------+
+| emp_id | name   | designation | dept    | lastname | SALARY |
++--------+--------+-------------+---------+----------+--------+
+|    105 | Victor | Associate   | Deposit | Corse    |  30000 |
+|    109 | Vishu  | Lead        | Deposit | Rick     |  30000 |
++--------+--------+-------------+---------+----------+--------+
+2 rows in set (0.00 sec)
+
+
+
+2. OR Operstor:
+# When either of the condition is true.
+
+mysql> SELECT * FROM employees WHERE SALARY = 30000 OR dept='IT';
++--------+--------+-------------+---------+-----------+--------+
+| emp_id | name   | designation | dept    | lastname  | SALARY |
++--------+--------+-------------+---------+-----------+--------+
+|    101 | Raju   | Manager     | Loan    | Sharma    |  30000 |
+|    103 | Paul   | Associate   | IT      | Verma     |  25000 |
+|    105 | Victor | Associate   | Deposit | Corse     |  30000 |
+|    106 | Akshay | Manager     | IT      | kadam     |  50000 |
+|    107 | Pravin | Lead        | IT      | Gartadkar |  70000 |
+|    109 | Vishu  | Lead        | Deposit | Rick      |  30000 |
++--------+--------+-------------+---------+-----------+--------+
+6 rows in set (0.00 sec)
+
+mysql> SELECT * FROM employees WHERE SALARY = 30000  OR SALARY=25000 OR SALARY = 70000;
++--------+--------+-------------+---------+-----------+--------+
+| emp_id | name   | designation | dept    | lastname  | SALARY |
++--------+--------+-------------+---------+-----------+--------+
+|    101 | Raju   | Manager     | Loan    | Sharma    |  30000 |
+|    103 | Paul   | Associate   | IT      | Verma     |  25000 |
+|    105 | Victor | Associate   | Deposit | Corse     |  30000 |
+|    107 | Pravin | Lead        | IT      | Gartadkar |  70000 |
+|    109 | Vishu  | Lead        | Deposit | Rick      |  30000 |
+|    110 | Shan   | Peon        | Staff   | Patil     |  70000 |
++--------+--------+-------------+---------+-----------+--------+
+6 rows in set (0.00 sec)
+
+
+
+
+*************************************************************************************************************************************************************************
+*                             *
+*  36. IN NOT IN Keywords     *
+*                             *
+*******************************
+
+1. IN:
+
+mysql> SELECT * FROM employees WHERE dept IN('Account','Cash','Loan');
++--------+-------+-------------+---------+----------+--------+
+| emp_id | name  | designation | dept    | lastname | SALARY |
++--------+-------+-------------+---------+----------+--------+
+|    101 | Raju  | Manager     | Loan    | Sharma   |  30000 |
+|    104 | Alex  | Accountant  | Account | Rajput   |  45000 |
+|    108 | Mayur | Cashier     | Account | Wankhede |  45000 |
++--------+-------+-------------+---------+----------+--------+
+3 rows in set (0.00 sec)
+
+
+
+2. NOT IN:
+
+mysql> SELECT * FROM employees WHERE dept NOT IN('Account','Cash','Loan');
++--------+--------+-------------+------------+-----------+--------+
+| emp_id | name   | designation | dept       | lastname  | SALARY |
++--------+--------+-------------+------------+-----------+--------+
+|    103 | Paul   | Associate   | IT         | Verma     |  25000 |
+|    105 | Victor | Associate   | Deposit    | Corse     |  30000 |
+|    106 | Akshay | Manager     | IT         | kadam     |  50000 |
+|    107 | Pravin | Lead        | IT         | Gartadkar |  70000 |
+|    109 | Vishu  | Lead        | Deposit    | Rick      |  30000 |
+|    110 | Shan   | Peon        | Staff      | Patil     |  70000 |
+|    111 | Manish | Associate   | Operations | Patil     |  45000 |
++--------+--------+-------------+------------+-----------+--------+
+7 rows in set (0.00 sec)
+
+
+
+
+*************************************************************************************************************************************************************************
+*                             *
+*  37. BETWEEN Keyword        *
+*                             *
+*******************************
+
+mysql> SELECT * FROM employees WHERE SALARY BETWEEN 50000 AND 79000;
++--------+--------+-------------+-------+-----------+--------+
+| emp_id | name   | designation | dept  | lastname  | SALARY |
++--------+--------+-------------+-------+-----------+--------+
+|    106 | Akshay | Manager     | IT    | kadam     |  50000 |
+|    107 | Pravin | Lead        | IT    | Gartadkar |  70000 |
+|    110 | Shan   | Peon        | Staff | Patil     |  70000 |
++--------+--------+-------------+-------+-----------+--------+
+3 rows in set (0.00 sec)
+
+
+
+
+*************************************************************************************************************************************************************************
+*                               *
+*  38. Case to apply conditions *
+*                               *
+*********************************
+
+mysql> SELECT
+    -> name,
+    -> SALARY,
+    -> CASE
+    ->   WHEN SALARY >= 45000 THEN 'Higher Salary'
+    ->   ELSE 'Lower Salary'
+    -> END AS 'Salary Category'
+    -> FROM employees;
+
++--------+--------+-----------------+
+| name   | SALARY | Salary Category |
++--------+--------+-----------------+
+| Raju   |  30000 | Lower Salary    |
+| Paul   |  25000 | Lower Salary    |
+| Alex   |  45000 | Higher Salary   |
+| Victor |  30000 | Lower Salary    |
+| Akshay |  50000 | Higher Salary   |
+| Pravin |  70000 | Higher Salary   |
+| Mayur  |  45000 | Higher Salary   |
+| Vishu  |  30000 | Lower Salary    |
+| Shan   |  70000 | Higher Salary   |
+| Manish |  45000 | Higher Salary   |
++--------+--------+-----------------+
+10 rows in set (0.00 sec)
+
+
+# Multiple conditions:
+
+mysql> SELECT
+    -> name,
+    -> SALARY,
+    -> CASE
+    ->   WHEN SALARY >= 50000 THEN 'Higher Salary'
+    ->   WHEN SALARY >= 30000 AND SALARY < 50000 THEN 'Mid Salary'
+    -> Else 'Lower Salary'
+    -> END AS  'SALARY Category'
+    -> FROM employees;
++--------+--------+-----------------+
+| name   | SALARY | SALARY Category |
++--------+--------+-----------------+
+| Raju   |  30000 | Mid Salary      |
+| Paul   |  25000 | Lower Salary    |
+| Alex   |  45000 | Mid Salary      |
+| Victor |  30000 | Mid Salary      |
+| Akshay |  50000 | Higher Salary   |
+| Pravin |  70000 | Higher Salary   |
+| Mayur  |  45000 | Mid Salary      |
+| Vishu  |  30000 | Mid Salary      |
+| Shan   |  70000 | Higher Salary   |
+| Manish |  45000 | Mid Salary      |
++--------+--------+-----------------+
+10 rows in set (0.00 sec)
+
+
+*************************************************************************************************************************************************************************
+*                               *
+*  39. IS NULL                  *
+*                               *
+*********************************
+
+# Use to check whether table contains null values.
+
+SELECT name FROM employees WHERE name IS NULL;
+
+
+*************************************************************************************************************************************************************************
+*                               *
+*  39. NOT LIKE                 *
+*                               *
+*********************************
+
+# Opposite of LIKE Keyword.
+
+mysql> SELECT * FROM employees WHERE name NOT LIKE "A%";
++--------+--------+-------------+------------+-----------+--------+
+| emp_id | name   | designation | dept       | lastname  | SALARY |
++--------+--------+-------------+------------+-----------+--------+
+|    101 | Raju   | Manager     | Loan       | Sharma    |  30000 |
+|    103 | Paul   | Associate   | IT         | Verma     |  25000 |
+|    105 | Victor | Associate   | Deposit    | Corse     |  30000 |
+|    107 | Pravin | Lead        | IT         | Gartadkar |  70000 |
+|    108 | Mayur  | Cashier     | Account    | Wankhede  |  45000 |
+|    109 | Vishu  | Lead        | Deposit    | Rick      |  30000 |
+|    110 | Shan   | Peon        | Staff      | Patil     |  70000 |
+|    111 | Manish | Associate   | Operations | Patil     |  45000 |
++--------+--------+-------------+------------+-----------+--------+
+8 rows in set (0.00 sec)
+
+
+*************************************************************************************************************************************************************************
+*                               *
+*    Excercise 07               *
+*                               *
+*********************************
+
+
+Q1. Find employees whose salary are between 30000 to 45000
+mysql> SELECT * FROM employees WHERE SALARY BETWEEN 30000 AND 45000;
++--------+--------+-------------+------------+----------+--------+
+| emp_id | name   | designation | dept       | lastname | SALARY |
++--------+--------+-------------+------------+----------+--------+
+|    101 | Raju   | Manager     | Loan       | Sharma   |  30000 |
+|    104 | Alex   | Accountant  | Account    | Rajput   |  45000 |
+|    105 | Victor | Associate   | Deposit    | Corse    |  30000 |
+|    108 | Mayur  | Cashier     | Account    | Wankhede |  45000 |
+|    109 | Vishu  | Lead        | Deposit    | Rick     |  30000 |
+|    111 | Manish | Associate   | Operations | Patil    |  45000 |
++--------+--------+-------------+------------+----------+--------+
+6 rows in set (0.00 sec)
+
+
+Q2. Find employees whose first name start with 'V' or 'R'
+mysql> SELECT * FROM employees WHERE name LIKE 'V%' OR name LIKE 'R%';
++--------+--------+-------------+---------+----------+--------+
+| emp_id | name   | designation | dept    | lastname | SALARY |
++--------+--------+-------------+---------+----------+--------+
+|    101 | Raju   | Manager     | Loan    | Sharma   |  30000 |
+|    105 | Victor | Associate   | Deposit | Corse    |  30000 |
+|    109 | Vishu  | Lead        | Deposit | Rick     |  30000 |
++--------+--------+-------------+---------+----------+--------+
+3 rows in set (0.00 sec)
+
+
+
+Q3. Find employees whose salary=30000 and department should be 'Deposit'
+mysql> SELECT * FROM employees WHERE SALARY=30000 AND dept = 'Deposit';
++--------+--------+-------------+---------+----------+--------+
+| emp_id | name   | designation | dept    | lastname | SALARY |
++--------+--------+-------------+---------+----------+--------+
+|    105 | Victor | Associate   | Deposit | Corse    |  30000 |
+|    109 | Vishu  | Lead        | Deposit | Rick     |  30000 |
++--------+--------+-------------+---------+----------+--------+
+2 rows in set (0.00 sec)
+
+
+
+Q4. Find employees from following designation
+    Manager, Lead, Associate
+
+mysql> SELECT * FROM employees WHERE designation IN('Manager', 'Lead', 'Associate');
++--------+--------+-------------+------------+-----------+--------+
+| emp_id | name   | designation | dept       | lastname  | SALARY |
++--------+--------+-------------+------------+-----------+--------+
+|    101 | Raju   | Manager     | Loan       | Sharma    |  30000 |
+|    103 | Paul   | Associate   | IT         | Verma     |  25000 |
+|    105 | Victor | Associate   | Deposit    | Corse     |  30000 |
+|    106 | Akshay | Manager     | IT         | kadam     |  50000 |
+|    107 | Pravin | Lead        | IT         | Gartadkar |  70000 |
+|    109 | Vishu  | Lead        | Deposit    | Rick      |  30000 |
+|    111 | Manish | Associate   | Operations | Patil     |  45000 |
++--------+--------+-------------+------------+-----------+--------+
+
+
+Q5. Create new column as Salary in dollars and use case statement
+
+mysql> SELECT
+    -> SALARY,
+    -> name,
+    -> CASE
+    ->  WHEN SALARY !=0 THEN SALARY/80
+    -> END AS 'SALARY in Dollars'
+    -> FROM employees;
++--------+--------+-------------------+
+| SALARY | name   | SALARY in Dollars |
++--------+--------+-------------------+
+|  30000 | Raju   |          375.0000 |
+|  25000 | Paul   |          312.5000 |
+|  45000 | Alex   |          562.5000 |
+|  30000 | Victor |          375.0000 |
+|  50000 | Akshay |          625.0000 |
+|  70000 | Pravin |          875.0000 |
+|  45000 | Mayur  |          562.5000 |
+|  30000 | Vishu  |          375.0000 |
+|  70000 | Shan   |          875.0000 |
+|  45000 | Manish |          562.5000 |
++--------+--------+-------------------+
+10 rows in set (0.00 sec)
+
+
+*************************************************************************************************************************************************************************
+*                               *
+*  40. UNIQUE Constraint        *
+*                               *
+*********************************
+
+# Need of UNIQUE Constraint:
+  As we already have primary constraint in table for unique values but
+  what if we need one more column whose values should be unique 
+  for e.x phone number, so here comes UNIQUE constraint.
+
+mysql> CREATE TABLE contact(
+    -> mobile varchar(10) UNIQUE);
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> INSERT INTO contact VALUES('7057472708');
+Query OK, 1 row affected (0.02 sec)
+
+mysql> SELECT * FROM contact;
++------------+
+| mobile     |
++------------+
+| 7057472708 |
++------------+
+1 row in set (0.00 sec)
+
+
+
+
+*************************************************************************************************************************************************************************
+*                               *
+*  40. CHECK Constraint         *
+*                               *
+*********************************
+
+# To make sure mobilenumber is atleast 10 digits
+# To apply above logic we need to add a condition while creating table.
+
+mysql> CREATE TABLE contacts(
+    -> mob varchar(12) UNIQUE CHECK (LENGTH(mob) >=10)
+    -> );
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> DESC contacts;
++-------+-------------+------+-----+---------+-------+
+| Field | Type        | Null | Key | Default | Extra |
++-------+-------------+------+-----+---------+-------+
+| mob   | varchar(12) | YES  | UNI | NULL    |       |
++-------+-------------+------+-----+---------+-------+
+1 row in set (0.02 sec)
+
+mysql> INSERT INTO contacts VALUES('123456');
+ERROR 3819 (HY000): Check constraint 'contacts_chk_1' is violated.
+
+mysql> SELECT * FROM contacts;
++------------+
+| mob        |
++------------+
+| 1234567890 |
+| 1234567891 |
++------------+
+2 rows in set (0.00 sec)
+
+
+
+*************************************************************************************************************************************************************************
+*                               *
+*  41. NAMED Constraint         *
+*                               *
+*********************************
+
+# As in above e.x we saw error as chk_1 violated,  we can customised
+  that error.
+
+
+mysql> CREATE TABLE new_contact(
+    -> mob varchar(15) UNIQUE,
+    -> CONSTRAINT mobno_less_than_10_digits CHECK(LENGTH(mob) >=10));
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> INSERT INTO new_contact VALUES(123456);
+ERROR 3819 (HY000): Check constraint 'mobno_less_than_10_digits' is violated.
+mysql> INSERT INTO new_contact VALUES(1234567890);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> SELECT * FROM new_contact;
++------------+
+| mob        |
++------------+
+| 1234567890 |
++------------+
+1 row in set (0.01 sec)
+
+
+*************************************************************************************************************************************************************************
+*                               *
+*  42. Alter Query              *
+*                               *
+*********************************
+
+# TO add or remove column 
+# To restructure our previous table
+
+1. Adding new column:
+ALTER TABLE table_name ADD COLUMN column_name datatype;
+
+mysql> ALTER TABLE new_contact ADD COLUMN name varchar(50);
+Query OK, 0 rows affected (0.03 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> INSERT INTO new_contact VALUES(9856321478, 'Neeraj');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> SELECT * FROM new_contact;
++------------+--------+
+| mob        | name   |
++------------+--------+
+| 1234567890 | NULL   |
+| 9856321478 | Neeraj |
++------------+--------+
+2 rows in set (0.00 sec)
+
+# When we add new column in old table the older value of new column 
+  is set to be NULL. 
+# We can change it using update query.
+
+2. Drop Column:
+AALTER TABLE table_name DROP COLUMN column_name
+
+mysql> ALTER TABLE new_contact DROP COLUMN name;
+Query OK, 0 rows affected (0.03 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> SELECT * FROM new_contact;
++------------+
+| mob        |
++------------+
+| 1234567890 |
+| 9856321478 |
++------------+
+2 rows in set (0.00 sec)
+
+
+3. Renaming Column :
+
+ALTER TABLE table_name RENAME COLUMN column_name TO new_name;
+
+
+mysql> ALTER TABLE new_contact RENAME COLUMN name TO NAME;
+Query OK, 0 rows affected (0.03 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> SELECT * FROM new_contact;
++------------+--------+
+| mob        | NAME   |
++------------+--------+
+| 1234567890 | NULL   |
+| 9856321478 | NULL   |
+| 9856321477 | Neeraj |
++------------+--------+
+3 rows in set (0.00 sec)
+
+
+4. Renaming Table:
+
+ALTER TABLE table_name RENAME TO new_name;
+                OR
+RENAME TABLE table_name TO new_name;
+
+mysql> ALTER TABLE new_contact RENAME TO Contact5;
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> SELECT * FROM Contact5;
++------------+--------+
+| mob        | NAME   |
++------------+--------+
+| 1234567890 | NULL   |
+| 9856321478 | NULL   |
+| 9856321477 | Neeraj |
++------------+--------+
+3 rows in set (0.00 sec)
+
+mysql> RENAME TABLE Contact5 TO Contact6;
+Query OK, 0 rows affected (0.03 sec)
+mysql> SELECT * FROM Contact6;
++------------+--------+
+| mob        | NAME   |
++------------+--------+
+| 1234567890 | NULL   |
+| 9856321478 | NULL   |
+| 9856321477 | Neeraj |
++------------+--------+
+3 rows in set (0.01 sec)
+
+
+
+5. Modify Column Property:
+# Changing datatype or Adding Default values.
+
+mysql> ALTER TABLE Contact6
+    -> MODIFY mob VARCHAR(20) DEFAULT 'Unknown';
+Query OK, 0 rows affected (0.03 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> DESC Contact6;
++-------+-------------+------+-----+---------+-------+
+| Field | Type        | Null | Key | Default | Extra |
++-------+-------------+------+-----+---------+-------+
+| mob   | varchar(20) | YES  | UNI | Unknown |       |
+| NAME  | varchar(50) | YES  |     | NULL    |       |
++-------+-------------+------+-----+---------+-------+
+2 rows in set (0.00 sec)
+
+
+
+
+
+
+*************************************************************************************************************************************************************************
+*                               *
+*  42. Relationship In MYSQL    *
+*                               *
+*********************************
+
+# Types of Relationship:
+1. One to one: 
+2. One to many
