@@ -2799,10 +2799,1111 @@ mysql> DESC Contact6;
 
 *************************************************************************************************************************************************************************
 *                               *
-*  42. Relationship In MYSQL    *
+*  43. Relationship In MYSQL    *
 *                               *
 *********************************
 
 # Types of Relationship:
 1. One to one: 
 2. One to many
+
+
+
+
+
+
+
+
+*************************************************************************************************************************************************************************
+*                               *
+*  42. Foreign Key              *
+*                               *
+*********************************
+
+mysql> use stores;
+Database changed
+mysql> CREATE TABLE customers(
+    -> cust_id INT AUTO_INCREMENT PRIMARY KEY,
+    -> name VARCHAR(50),
+    -> email VARCHAR(50)
+    -> );
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> DESC customers;
++---------+-------------+------+-----+---------+----------------+
+| Field   | Type        | Null | Key | Default | Extra          |
++---------+-------------+------+-----+---------+----------------+
+| cust_id | int         | NO   | PRI | NULL    | auto_increment |
+| name    | varchar(50) | YES  |     | NULL    |                |
+| email   | varchar(50) | YES  |     | NULL    |                |
++---------+-------------+------+-----+---------+----------------+
+3 rows in set (0.04 sec)
+
+
+mysql> CREATE TABLE orders(
+    -> ord_id INT AUTO_INCREMENT PRIMARY KEY,
+    -> date DATE,
+    -> amount DECIMAL(10,2),
+    -> cust_id INT,
+    -> FOREIGN KEY(cust_id) REFERENCES customers(cust_id)
+    -> );
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> DESC orders;
++---------+---------------+------+-----+---------+----------------+
+| Field   | Type          | Null | Key | Default | Extra          |
++---------+---------------+------+-----+---------+----------------+
+| ord_id  | int           | NO   | PRI | NULL    | auto_increment |
+| date    | date          | YES  |     | NULL    |                |
+| amount  | decimal(10,2) | YES  |     | NULL    |                |
+| cust_id | int           | YES  | MUL | NULL    |                |
++---------+---------------+------+-----+---------+----------------+
+4 rows in set (0.00 sec)
+
+
+mysql> INSERT INTO customers(name,email) VALUES('Raju','raju@gmail.com'),('Sham','sham@gmail.com');
+Query OK, 2 rows affected (0.05 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+
+
+mysql> SELECT * FROM customers;
++---------+------+----------------+
+| cust_id | name | email          |
++---------+------+----------------+
+|       1 | Raju | raju@gmail.com |
+|       2 | Sham | sham@gmail.com |
++---------+------+----------------+
+2 rows in set (0.00 sec)
+
+
+mysql> INSERT INTO orders(date,amount,cust_id) VALUES(CURDATE(),105.38,1);
+Query OK, 1 row affected (0.05 sec)
+
+mysql> INSERT INTO orders(date,amount,cust_id) VALUES(CURDATE(),500.38,1);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> INSERT INTO orders(date,amount,cust_id) VALUES(CURDATE(),300.38,1);
+Query OK, 1 row affected (0.04 sec)
+
+mysql> INSERT INTO orders(date,amount,cust_id) VALUES(CURDATE(),300.38,2);
+Query OK, 1 row affected (0.04 sec)
+
+mysql> SELECT * FROM orders;
++--------+------------+--------+---------+
+| ord_id | date       | amount | cust_id |
++--------+------------+--------+---------+
+|      1 | 2024-09-20 | 105.38 |       1 |
+|      2 | 2024-09-20 | 500.38 |       1 |
+|      3 | 2024-09-20 | 300.38 |       1 |
+|      4 | 2024-09-20 | 300.38 |       2 |
++--------+------------+--------+---------+
+4 rows in set (0.00 sec)
+
+
+
+
+*************************************************************************************************************************************************************************
+*                               *
+*  44. Joins                    *
+*                               *
+*********************************
+
+# Join operation is used to combine rows from two or more tables 
+  based on a related column between them 
+
+
+mysql> SELECT * FROM customers;
++---------+------+----------------+
+| cust_id | name | email          |
++---------+------+----------------+
+|       1 | Raju | raju@gmail.com |
+|       2 | Sham | sham@gmail.com |
+|       3 | Babu | babu@gmail.com |
+|       4 | Paul | paul@gmail.com |
+|       5 | Alex | alex@gmail.com |
++---------+------+----------------+
+5 rows in set (0.00 sec)
+
+
+  mysql> SELECT * FROM orders;
++--------+------------+---------+---------+
+| ord_id | date       | amount  | cust_id |
++--------+------------+---------+---------+
+|      1 | 2024-09-20 |  105.38 |       1 |
+|      2 | 2024-09-20 |  500.38 |       1 |
+|      3 | 2024-09-20 |  300.38 |       1 |
+|      4 | 2024-09-20 |  300.38 |       2 |
+|      5 | 2024-09-20 |  400.38 |       5 |
+|      6 | 2024-09-20 |  700.00 |       4 |
+|      7 | 2024-09-20 |  400.00 |       5 |
+|      8 | 2024-09-20 | 1000.00 |       3 |
+|      9 | 2024-09-20 | 1100.00 |       4 |
++--------+------------+---------+---------+
+9 rows in set (0.00 sec)
+
+
+Types of Join:
+1. Cross Join:
+# Every row from one table is combined with every row from 
+  another table.
+
+
+  mysql> SELECT * FROM customers, orders ;
++---------+------+----------------+--------+------------+---------+---------+
+| cust_id | name | email          | ord_id | date       | amount  | cust_id |
++---------+------+----------------+--------+------------+---------+---------+
+|       5 | Alex | alex@gmail.com |      1 | 2024-09-20 |  105.38 |       1 |
+|       4 | Paul | paul@gmail.com |      1 | 2024-09-20 |  105.38 |       1 |
+|       3 | Babu | babu@gmail.com |      1 | 2024-09-20 |  105.38 |       1 |
+|       2 | Sham | sham@gmail.com |      1 | 2024-09-20 |  105.38 |       1 |
+|       1 | Raju | raju@gmail.com |      1 | 2024-09-20 |  105.38 |       1 |
+|       5 | Alex | alex@gmail.com |      2 | 2024-09-20 |  500.38 |       1 |
+|       4 | Paul | paul@gmail.com |      2 | 2024-09-20 |  500.38 |       1 |
+|       3 | Babu | babu@gmail.com |      2 | 2024-09-20 |  500.38 |       1 |
+|       2 | Sham | sham@gmail.com |      2 | 2024-09-20 |  500.38 |       1 |
+|       1 | Raju | raju@gmail.com |      2 | 2024-09-20 |  500.38 |       1 |
+|       5 | Alex | alex@gmail.com |      3 | 2024-09-20 |  300.38 |       1 |
+|       4 | Paul | paul@gmail.com |      3 | 2024-09-20 |  300.38 |       1 |
+|       3 | Babu | babu@gmail.com |      3 | 2024-09-20 |  300.38 |       1 |
+|       2 | Sham | sham@gmail.com |      3 | 2024-09-20 |  300.38 |       1 |
+|       1 | Raju | raju@gmail.com |      3 | 2024-09-20 |  300.38 |       1 |
+|       5 | Alex | alex@gmail.com |      4 | 2024-09-20 |  300.38 |       2 |
+|       4 | Paul | paul@gmail.com |      4 | 2024-09-20 |  300.38 |       2 |
+|       3 | Babu | babu@gmail.com |      4 | 2024-09-20 |  300.38 |       2 |
+|       2 | Sham | sham@gmail.com |      4 | 2024-09-20 |  300.38 |       2 |
+|       1 | Raju | raju@gmail.com |      4 | 2024-09-20 |  300.38 |       2 |
+|       5 | Alex | alex@gmail.com |      5 | 2024-09-20 |  400.38 |       5 |
+|       4 | Paul | paul@gmail.com |      5 | 2024-09-20 |  400.38 |       5 |
+|       3 | Babu | babu@gmail.com |      5 | 2024-09-20 |  400.38 |       5 |
+|       2 | Sham | sham@gmail.com |      5 | 2024-09-20 |  400.38 |       5 |
+|       1 | Raju | raju@gmail.com |      5 | 2024-09-20 |  400.38 |       5 |
+|       5 | Alex | alex@gmail.com |      6 | 2024-09-20 |  700.00 |       4 |
+|       4 | Paul | paul@gmail.com |      6 | 2024-09-20 |  700.00 |       4 |
+|       3 | Babu | babu@gmail.com |      6 | 2024-09-20 |  700.00 |       4 |
+|       2 | Sham | sham@gmail.com |      6 | 2024-09-20 |  700.00 |       4 |
+|       1 | Raju | raju@gmail.com |      6 | 2024-09-20 |  700.00 |       4 |
+|       5 | Alex | alex@gmail.com |      7 | 2024-09-20 |  400.00 |       5 |
+|       4 | Paul | paul@gmail.com |      7 | 2024-09-20 |  400.00 |       5 |
+|       3 | Babu | babu@gmail.com |      7 | 2024-09-20 |  400.00 |       5 |
+|       2 | Sham | sham@gmail.com |      7 | 2024-09-20 |  400.00 |       5 |
+|       1 | Raju | raju@gmail.com |      7 | 2024-09-20 |  400.00 |       5 |
+|       5 | Alex | alex@gmail.com |      8 | 2024-09-20 | 1000.00 |       3 |
+|       4 | Paul | paul@gmail.com |      8 | 2024-09-20 | 1000.00 |       3 |
+|       3 | Babu | babu@gmail.com |      8 | 2024-09-20 | 1000.00 |       3 |
+|       2 | Sham | sham@gmail.com |      8 | 2024-09-20 | 1000.00 |       3 |
+|       1 | Raju | raju@gmail.com |      8 | 2024-09-20 | 1000.00 |       3 |
+|       5 | Alex | alex@gmail.com |      9 | 2024-09-20 | 1100.00 |       4 |
+|       4 | Paul | paul@gmail.com |      9 | 2024-09-20 | 1100.00 |       4 |
+|       3 | Babu | babu@gmail.com |      9 | 2024-09-20 | 1100.00 |       4 |
+|       2 | Sham | sham@gmail.com |      9 | 2024-09-20 | 1100.00 |       4 |
+|       1 | Raju | raju@gmail.com |      9 | 2024-09-20 | 1100.00 |       4 |
++---------+------+----------------+--------+------------+---------+---------+
+45 rows in set (0.03 sec)
+
+2. Inner Join:
+# Return only the rows where there is a match between the 
+  specified columns in both the left(first) and right(second) tables.
+
+   mysql> SELECT * FROM customers
+    -> INNER JOIN orders
+    -> ON orders.cust_id =customers.cust_id;
++---------+------+----------------+--------+------------+---------+---------+
+| cust_id | name | email          | ord_id | date       | amount  | cust_id |
++---------+------+----------------+--------+------------+---------+---------+
+|       1 | Raju | raju@gmail.com |      1 | 2024-09-20 |  105.38 |       1 |
+|       1 | Raju | raju@gmail.com |      2 | 2024-09-20 |  500.38 |       1 |
+|       1 | Raju | raju@gmail.com |      3 | 2024-09-20 |  300.38 |       1 |
+|       2 | Sham | sham@gmail.com |      4 | 2024-09-20 |  300.38 |       2 |
+|       3 | Babu | babu@gmail.com |      8 | 2024-09-20 | 1000.00 |       3 |
+|       4 | Paul | paul@gmail.com |      6 | 2024-09-20 |  700.00 |       4 |
+|       4 | Paul | paul@gmail.com |      9 | 2024-09-20 | 1100.00 |       4 |
+|       5 | Alex | alex@gmail.com |      5 | 2024-09-20 |  400.38 |       5 |
+|       5 | Alex | alex@gmail.com |      7 | 2024-09-20 |  400.00 |       5 |
++---------+------+----------------+--------+------------+---------+---------+
+9 rows in set (0.00 sec)
+
+
+Inner Join with group by:
+
+mysql> SELECT name FROM customers
+    -> INNER JOIN orders
+    -> ON orders.cust_id =customers.cust_id
+    -> GROUP BY name;
++------+
+| name |
++------+
+| Raju |
+| Sham |
+| Babu |
+| Paul |
+| Alex |
++------+
+5 rows in set (0.00 sec)
+
+Sum of amount spend by each:
+mysql> SELECT name, SUM(amount) FROM customers
+    -> INNER JOIN orders
+    -> ON orders.cust_id =customers.cust_id
+    -> GROUP BY name;
++------+-------------+
+| name | SUM(amount) |
++------+-------------+
+| Raju |      906.14 |
+| Sham |      300.38 |
+| Babu |     1000.00 |
+| Paul |     1800.00 |
+| Alex |      800.38 |
++------+-------------+
+5 rows in set (0.00 sec)
+
+
+
+
+3. Left Join:
+# Returns all rows from left table and matching rows from right table.
+
+mysql> SELECT * FROM customers LEFT JOIN orders
+    -> ON orders.cust_id=customers.cust_id;
++---------+------+----------------+--------+------------+---------+---------+
+| cust_id | name | email          | ord_id | date       | amount  | cust_id |
++---------+------+----------------+--------+------------+---------+---------+
+|       1 | Raju | raju@gmail.com |      1 | 2024-09-20 |  105.38 |       1 |
+|       1 | Raju | raju@gmail.com |      2 | 2024-09-20 |  500.38 |       1 |
+|       1 | Raju | raju@gmail.com |      3 | 2024-09-20 |  300.38 |       1 |
+|       2 | Sham | sham@gmail.com |      4 | 2024-09-20 |  300.38 |       2 |
+|       3 | Babu | babu@gmail.com |      8 | 2024-09-20 | 1000.00 |       3 |
+|       4 | Paul | paul@gmail.com |      6 | 2024-09-20 |  700.00 |       4 |
+|       4 | Paul | paul@gmail.com |      9 | 2024-09-20 | 1100.00 |       4 |
+|       5 | Alex | alex@gmail.com |      5 | 2024-09-20 |  400.38 |       5 |
+|       5 | Alex | alex@gmail.com |      7 | 2024-09-20 |  400.00 |       5 |
++---------+------+----------------+--------+------------+---------+---------+
+9 rows in set (0.00 sec)
+
+Group by:
+
+mysql> SELECT name, SUM(amount) FROM customers
+    -> LEFT JOIN orders
+    -> ON orders.cust_id =customers.cust_id GROUP BY name;
++------+-------------+
+| name | SUM(amount) |
++------+-------------+
+| Raju |      906.14 |
+| Sham |      300.38 |
+| Babu |     1000.00 |
+| Paul |     1800.00 |
+| Alex |      800.38 |
++------+-------------+
+5 rows in set (0.00 sec)
+
+
+
+4. Right Join:
+# 
+Returns all rows from right table and matching rows from left table.
+
+mysql> SELECT * FROM customers RIGHT JOIN orders
+    -> ON orders.cust_id=customers.cust_id;
++---------+------+----------------+--------+------------+---------+---------+
+| cust_id | name | email          | ord_id | date       | amount  | cust_id |
++---------+------+----------------+--------+------------+---------+---------+
+|       1 | Raju | raju@gmail.com |      1 | 2024-09-20 |  105.38 |       1 |
+|       1 | Raju | raju@gmail.com |      2 | 2024-09-20 |  500.38 |       1 |
+|       1 | Raju | raju@gmail.com |      3 | 2024-09-20 |  300.38 |       1 |
+|       2 | Sham | sham@gmail.com |      4 | 2024-09-20 |  300.38 |       2 |
+|       5 | Alex | alex@gmail.com |      5 | 2024-09-20 |  400.38 |       5 |
+|       4 | Paul | paul@gmail.com |      6 | 2024-09-20 |  700.00 |       4 |
+|       5 | Alex | alex@gmail.com |      7 | 2024-09-20 |  400.00 |       5 |
+|       3 | Babu | babu@gmail.com |      8 | 2024-09-20 | 1000.00 |       3 |
+|       4 | Paul | paul@gmail.com |      9 | 2024-09-20 | 1100.00 |       4 |
++---------+------+----------------+--------+------------+---------+---------+
+9 rows in set (0.00 sec)
+
+
+
+
+
+
+*************************************************************************************************************************************************************************
+*                               *
+*  44. ON DELETE CASCADE        *
+*                               *
+*********************************
+
+# we cannot delete record from customer table because it is associated
+  with another table so we use delete cascade wile creating table.
+# we will need to drop our order table  and create a new one.
+
+mysql> DROP table orders;
+Query OK, 0 rows affected (0.03 sec)
+
+  mysql> CREATE TABLE orderss(ord_id INT AUTO_INCREMENT PRIMARY KEY,
+    -> date DATE,
+    -> amount DECIMAL(10, 2),
+    -> cust_id INT,
+    -> FOREIGN KEY (cust_id) REFERENCES customers(cust_id) ON DELETE CASCADE);
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> INSERT INTO orderss(date,amount,cust_id) VALUES(CURDATE(), 100.50, 1),
+    -> (CURDATE(), 300.30,1);
+Query OK, 2 rows affected (0.02 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+
+
+mysql> SELECT * from customers;
++---------+------+----------------+
+| cust_id | name | email          |
++---------+------+----------------+
+|       1 | Raju | raju@gmail.com |
+|       2 | Sham | sham@gmail.com |
+|       3 | Babu | babu@gmail.com |
+|       4 | Paul | paul@gmail.com |
+|       5 | Alex | alex@gmail.com |
++---------+------+----------------+
+5 rows in set (0.00 sec)
+
+
+mysql> SELECT * from orderss;
++--------+------------+--------+---------+
+| ord_id | date       | amount | cust_id |
++--------+------------+--------+---------+
+|      1 | 2024-09-21 | 100.50 |       1 |
+|      2 | 2024-09-21 | 300.30 |       1 |
+|      3 | 2024-09-21 | 120.50 |       2 |
++--------+------------+--------+---------+
+3 rows in set (0.00 sec)
+
+
+
+mysql> DELETE FROM customers WHERE name='Raju';
+Query OK, 1 row affected (0.01 sec)
+
+mysql> SELECT * FROM orderss;
++--------+------------+--------+---------+
+| ord_id | date       | amount | cust_id |
++--------+------------+--------+---------+
+|      3 | 2024-09-21 | 120.50 |       2 |
++--------+------------+--------+---------+
+1 row in set (0.00 sec)
+
+mysql> SELECT * FROM customers;
++---------+------+----------------+
+| cust_id | name | email          |
++---------+------+----------------+
+|       2 | Sham | sham@gmail.com |
+|       3 | Babu | babu@gmail.com |
+|       4 | Paul | paul@gmail.com |
+|       5 | Alex | alex@gmail.com |
++---------+------+----------------+
+4 rows in set (0.00 sec)
+
+
+
+
+
+*************************************************************************************************************************************************************************
+*                               *
+*      Exercise 08              *
+*                               *
+*********************************
+
+Create 2 tables Author and Books:
+
+
+mysql> CREATE TABLE AUthors(
+    -> author_id INT AUTO_INCREMENT PRIMARY KEY,
+    -> author_name VARCHAR(50)
+    -> );
+Query OK, 0 rows affected (0.02 sec)
+
+
+mysql> DESC Authors;
++-------------+-------------+------+-----+---------+----------------+
+| Field       | Type        | Null | Key | Default | Extra          |
++-------------+-------------+------+-----+---------+----------------+
+| author_id   | int         | NO   | PRI | NULL    | auto_increment |
+| author_name | varchar(50) | YES  |     | NULL    |                |
++-------------+-------------+------+-----+---------+----------------+
+2 rows in set (0.00 sec)
+
+mysql> INSERT INTO Authors(author_name) VALUES('Raju'),('Sham'),('Baburao'),('Paul');
+Query OK, 4 rows affected (0.02 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+
+
+mysql> SELECT * FROM Authors;
++-----------+-------------+
+| author_id | author_name |
++-----------+-------------+
+|         1 | Raju        |
+|         2 | Sham        |
+|         3 | Baburao     |
+|         4 | Paul        |
++-----------+-------------+
+4 rows in set (0.00 sec)
+
+
+
+mysql> CREATE TABLE Books(
+    -> book_id INT AUTO_INCREMENT PRIMARY KEY,
+    -> title VARCHAR(50),
+    ->title VARCHAR(50),
+    -> au_id INT,
+    -> FOREIGN KEY (au_id) REFERENCES Authors(author_id) ON DELETE CASCADE
+    -> );
+Query OK, 0 rows affected (0.03 sec)
+
+
+mysql> DESC Books;
++---------+-------------+------+-----+---------+----------------+
+| Field   | Type        | Null | Key | Default | Extra          |
++---------+-------------+------+-----+---------+----------------+
+| book_id | int         | NO   | PRI | NULL    | auto_increment |
+| title   | varchar(50) | YES  |     | NULL    |                |
+| au_id   | int         | YES  | MUL | NULL    |                |
+| ratings | int         | YES  |     | NULL    |                |
++---------+-------------+------+-----+---------+----------------+
+4 rows in set (0.00 sec)
+
+
+mysql> INSERT INTO Books(title,ratings, au_id) VALUES
+    -> ('Story of Raju',5,1),
+    -> ('Story of Baburao', 4, 3),
+    -> ('Raju- The Great MAn',2, 1),
+    -> ('Love stiry by Sham',1, 2);
+Query OK, 4 rows affected (0.04 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+
+
+
+mysql> SELECT * FROM Books;
++---------+---------------------+-------+---------+
+| book_id | title               | au_id | ratings |
++---------+---------------------+-------+---------+
+|       1 | Story of Raju       |     1 |       5 |
+|       2 | Story of Baburao    |     3 |       4 |
+|       3 | Raju- The Great MAn |     1 |       2 |
+|       4 | Love stiry by Sham  |     2 |       1 |
++---------+---------------------+-------+---------+
+4 rows in set (0.00 sec)
+
+
+mysql> SELECT * FROM Authors;
++-----------+-------------+
+| author_id | author_name |
++-----------+-------------+
+|         1 | Raju        |
+|         2 | Sham        |
+|         3 | Baburao     |
+|         4 | Paul        |
++-----------+-------------+
+4 rows in set (0.00 sec)
+
+Q1. Display below table using joins:
++-------------+---------------------+---------+
+| author_name | title               | ratings |
++-------------+---------------------+---------+
+| Raju        | Story of Raju       |       5 |
+| Raju        | Raju- The Great MAn |       2 |
+| Sham        | Love stiry by Sham  |       1 |
+| Baburao     | Story of Baburao    |       4 |
++-------------+---------------------+---------+
+4 rows in set (0.00 sec)
+
+
+Soluution: Observe the o/p carefully, you will see that o/p are only
+matching values. Means table 1 value matches in table 2.
+
+mysql> SELECT author_name,title, ratings FROM Authors
+    -> INNER JOIN Books
+    -> ON Books.au_id = Authors.author_id;
++-------------+---------------------+---------+
+| author_name | title               | ratings |
++-------------+---------------------+---------+
+| Raju        | Story of Raju       |       5 |
+| Raju        | Raju- The Great MAn |       2 |
+| Sham        | Love stiry by Sham  |       1 |
+| Baburao     | Story of Baburao    |       4 |
++-------------+---------------------+---------+
+4 rows in set (0.00 sec)
+
+
+Q2. Display below table as o/p:
++-------------+---------------------+---------+
+| author_name | title               | ratings |
++-------------+---------------------+---------+
+| Raju        | Story of Raju       |       5 |
+| Raju        | Raju- The Great MAn |       2 |
+| Sham        | Love stiry by Sham  |       1 |
+| Baburao     | Story of Baburao    |       4 |
+| Paul        | NULL                |    NULL |
++-------------+---------------------+---------+
+
+Solution: It is similar o/p as previous query just one record is addition 
+added i.e Paul. Means we can see all records from left table and matching 
+record from right table.
+
+mysql> SELECT author_name, title, ratings
+    -> FROM Authors
+    -> LEFT JOIN Books
+    -> ON Books.au_id = Authors.author_id;
++-------------+---------------------+---------+
+| author_name | title               | ratings |
++-------------+---------------------+---------+
+| Raju        | Story of Raju       |       5 |
+| Raju        | Raju- The Great MAn |       2 |
+| Sham        | Love stiry by Sham  |       1 |
+| Baburao     | Story of Baburao    |       4 |
+| Paul        | NULL                |    NULL |
++-------------+---------------------+---------+
+5 rows in set (0.00 sec)
+
+
+Q3. In Previous table Paul has value as NULL change title as NOT FOUND
+    and rating as 0.
+
+Solution:
+We will use IFNULL() here 
+
+mysql> SELECT author_name, IFNULL(title, 'NOT FOUND'), IFNULL(ratings,0)
+    -> FROM Authors
+    -> LEFT JOIN Books
+    -> ON Books.au_id = Authors.author_id;
++-------------+----------------------------+-------------------+
+| author_name | IFNULL(title, 'NOT FOUND') | IFNULL(ratings,0) |
++-------------+----------------------------+-------------------+
+| Raju        | Story of Raju              |                 5 |
+| Raju        | Raju- The Great MAn        |                 2 |
+| Sham        | Love stiry by Sham         |                 1 |
+| Baburao     | Story of Baburao           |                 4 |
+| Paul        | NOT FOUND                  |                 0 |
++-------------+----------------------------+-------------------+
+5 rows in set (0.00 sec)
+
+Q4. Add new column as Remark and display below results:
+
++-------------+---------+---------+
+| author_name | ratings | Remark  |
++-------------+---------+---------+
+| Raju        |       5 | Good    |
+| Raju        |       2 | Average |
+| Sham        |       1 | Average |
+| Baburao     |       4 | Good    |
++-------------+---------+---------+
+
+Solution:
+
+mysql> SELECT author_name, ratings,
+    -> CASE
+    -> WHEN ratings >=3 THEN 'Good'
+    -> ELSE 'Average'
+    -> END AS 'Remark'
+    -> FROM Authors
+    -> INNER JOIN Books
+    -> ON Books.au_id = Authors.author_id;
++-------------+---------+---------+
+| author_name | ratings | Remark  |
++-------------+---------+---------+
+| Raju        |       5 | Good    |
+| Raju        |       2 | Average |
+| Sham        |       1 | Average |
+| Baburao     |       4 | Good    |
++-------------+---------+---------+
+4 rows in set (0.00 sec)
+
+
+
+
+*************************************************************************************************************************************************************************
+*                                 *
+*  45. Many To Many Relationship  *
+*                                 *
+***********************************
+
+Use Case:
+# Suppose in a database you have to create 2 tables Studnets and Courses.
+# Both details are connected to each other.
+  Like which student applied for which Courses?
+  Like which courses has which which students?
+# How M:M relation came??
+  One student can apply for multiple courses, same one course can have
+  multiple students.
+# Create 2 tables student(s_id,s_name) courses(c_id,c_name,fees)
+# In M:M relation there is concept called as bridge table or junction table,
+  In bridge table we create separate table, it work is to connect the two tables.
+  In our case student_course is a table contains student_id, course_id
+# The student_id and course_id act as a foreign key and get connect to 
+  s_id and c_id 
+
+Practical:
+
+mysql> CREATE DATABASE institute;
+Query OK, 1 row affected (0.05 sec)
+
+mysql> USE institute;
+Database changed
+
+mysql> CREATE TABLE students(
+    -> s_id INT AUTO_INCREMENT PRIMARY KEY,
+    -> s_name VARCHAR(250)
+    -> );
+Query OK, 0 rows affected (0.07 sec)
+
+mysql> DESC students;
++--------+--------------+------+-----+---------+----------------+
+| Field  | Type         | Null | Key | Default | Extra          |
++--------+--------------+------+-----+---------+----------------+
+| s_id   | int          | NO   | PRI | NULL    | auto_increment |
+| s_name | varchar(250) | YES  |     | NULL    |                |
++--------+--------------+------+-----+---------+----------------+
+2 rows in set (0.05 sec)
+
+
+mysql> CREATE TABLE courses(
+    -> c_id INT AUTO_INCREMENT PRIMARY KEY,
+    -> c_name VARCHAR(250),
+    -> fees INT
+    -> );
+Query OK, 0 rows affected (0.07 sec)
+
+
+mysql> DESC courses;
+
++--------+--------------+------+-----+---------+----------------+
+| Field  | Type         | Null | Key | Default | Extra          |
++--------+--------------+------+-----+---------+----------------+
+| c_id   | int          | NO   | PRI | NULL    | auto_increment |
+| c_name | varchar(250) | YES  |     | NULL    |                |
+| fees   | int          | YES  |     | NULL    |                |
++--------+--------------+------+-----+---------+----------------+
+3 rows in set (0.01 sec)
+
+
+Bridge Table:
+
+mysql> CREATE TABLE student_course(
+    -> student_id INT,
+    -> course_id INT,
+    -> FOREIGN KEY(student_id) REFERENCES students(s_id),
+    -> FOREIGN KEY(course_id)  REFERENCES courses(c_id)
+    -> );
+Query OK, 0 rows affected (0.08 sec)
+
+mysql> DESC student_course;
++------------+------+------+-----+---------+-------+
+| Field      | Type | Null | Key | Default | Extra |
++------------+------+------+-----+---------+-------+
+| student_id | int  | YES  | MUL | NULL    |       |
+| course_id  | int  | YES  | MUL | NULL    |       |
++------------+------+------+-----+---------+-------+
+2 rows in set (0.00 sec)
+
+
+mysql> INSERT INTO students(s_name) VALUES('Raju'),('Sham'), ('Paul'), ('Alex');
+Query OK, 4 rows affected (0.05 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+
+mysql> SELECT * FROM students;
++------+--------+
+| s_id | s_name |
++------+--------+
+|    1 | Raju   |
+|    2 | Sham   |
+|    3 | Paul   |
+|    4 | Alex   |
++------+--------+
+4 rows in set (0.00 sec)
+
+
+
+mysql> INSERT INTO courses(c_id,c_name,fees) VALUES(101,'PD',3000);
+Query OK, 1 row affected (0.05 sec)
+
+mysql> INSERT INTO courses(c_name,fees) VALUES('Java',5000), ('SQL',4000),('Python',6000),('Linux',2500);
+Query OK, 4 rows affected (0.04 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+
+
+mysql> SELECT * FROM courses;
++------+--------+------+
+| c_id | c_name | fees |
++------+--------+------+
+|  101 | PD     | 3000 |
+|  102 | Java   | 5000 |
+|  103 | SQL    | 4000 |
+|  104 | Python | 6000 |
+|  105 | Linux  | 2500 |
++------+--------+------+
+5 rows in set (0.00 sec)
+
+
+mysql> INSERT INTO student_course(student_id, course_id) VALUES(1,101), (1,102),(2,105),(1,105),(3,103),(2,102),(4,104);
+Query OK, 7 rows affected (0.01 sec)
+Records: 7  Duplicates: 0  Warnings: 0
+
+mysql> SELECT * FROM student_course;
++------------+-----------+
+| student_id | course_id |
++------------+-----------+
+|          1 |       101 |
+|          1 |       102 |
+|          2 |       105 |
+|          1 |       105 |
+|          3 |       103 |
+|          2 |       102 |
+|          4 |       104 |
++------------+-----------+
+7 rows in set (0.00 sec)
+
+Q1. Display student name and course name in which tey have enrolled
++--------+--------+
+| s_name | c_name |
++--------+--------+
+| Raju   | PD     |
+| Raju   | Java   |
+| Raju   | Linux  |
+| Sham   | Linux  |
+| Sham   | Java   |
+| Paul   | SQL    |
+| Alex   | Python |
++--------+--------+
+
+
+Solution:
+mysql> SELECT s_name, c_name FROM students
+    -> JOIN
+    -> student_course ON student_course.student_id =  students.s_id
+    -> JOIN
+    -> courses ON student_course.course_id = courses.c_id;
++--------+--------+
+| s_name | c_name |
++--------+--------+
+| Raju   | PD     |
+| Raju   | Java   |
+| Raju   | Linux  |
+| Sham   | Linux  |
+| Sham   | Java   |
+| Paul   | SQL    |
+| Alex   | Python |
++--------+--------+
+7 rows in set (0.00 sec)
+
+
+
+Q2. Print No. of students for each course.
+
+mysql> SELECT c_name, COUNT(s_name) FROM students
+    -> JOIN
+    -> student_course ON student_course.student_id =  students.s_id
+    -> JOIN
+    -> courses ON student_course.course_id = courses.c_id
+    -> GROUP BY c_name;
++--------+---------------+
+| c_name | COUNT(s_name) |
++--------+---------------+
+| PD     |             1 |
+| Java   |             2 |
+| Linux  |             2 |
+| SQL    |             1 |
+| Python |             1 |
++--------+---------------+
+5 rows in set (0.00 sec)
+
+
+Q3. Print no. of courses taken by each students.
++--------+---------------+
+| s_name | COUNT(c_name) |
++--------+---------------+
+| Raju   |             3 |
+| Sham   |             2 |
+| Paul   |             1 |
+| Alex   |             1 |
++--------+---------------+
+Solution:
+
+mysql> SELECT s_name, COUNT(c_name) FROM students
+    -> JOIN
+    -> student_course ON student_course.student_id = students.s_id
+    -> JOIN
+    -> courses ON student_course.course_id = courses.c_id
+    -> GROUP BY s_name;
++--------+---------------+
+| s_name | COUNT(c_name) |
++--------+---------------+
+| Raju   |             3 |
+| Sham   |             2 |
+| Paul   |             1 |
+| Alex   |             1 |
++--------+---------------+
+4 rows in set (0.00 sec)
+
+
+Q4. Display Total fees paid by each student:
++--------+-----------+
+| s_name | SUM(fees) |
++--------+-----------+
+| Raju   |     10500 |
+| Sham   |      7500 |
+| Paul   |      4000 |
+| Alex   |      6000 |
++--------+-----------+
+
+
+Solution:
+
+mysql> SELECT s_name, SUM(fees) FROM students
+    -> JOIN
+    -> student_course ON student_course.student_id = students.s_id
+    -> JOIN
+    -> courses ON student_course.course_id = courses.c_id
+    -> GROUP BY s_name;
++--------+-----------+
+| s_name | SUM(fees) |
++--------+-----------+
+| Raju   |     10500 |
+| Sham   |      7500 |
+| Paul   |      4000 |
+| Alex   |      6000 |
++--------+-----------+
+4 rows in set (0.00 sec)
+
+
+
+*************************************************************************************************************************************************************************
+*                                    *
+*  46. VIEW to create Virtual Tables *
+*                                    *
+**************************************
+
+# Views are stored queries that when invoked produce a result set.
+# A view acts as a virtual table.
+# Creating view means keeping your columns of all tables in one container 
+which can be helpful for retreiving data easily.
+# Lets create a view and keep our previous tables columns in it.
+
+mysql> CREATE VIEW inst_info AS
+    -> SELECT s_name, c_name, fees FROM students
+    -> JOIN
+    -> student_course ON student_course.student_id = students.s_id
+    -> JOIN
+    -> courses ON student_course.course_id = courses.c_id;
+Query OK, 0 rows affected (0.05 sec)
+
+mysql> SHOW TABLES;
++---------------------+
+| Tables_in_institute |
++---------------------+
+| courses             |
+| inst_info           |
+| student_course      |
+| students            |
++---------------------+
+4 rows in set (0.04 sec)
+
+# inst_info is a virtual table:
+mysql> SELECT * FROM inst_info;
++--------+--------+------+
+| s_name | c_name | fees |
++--------+--------+------+
+| Raju   | PD     | 3000 |
+| Raju   | Java   | 5000 |
+| Raju   | Linux  | 2500 |
+| Sham   | Linux  | 2500 |
+| Sham   | Java   | 5000 |
+| Paul   | SQL    | 4000 |
+| Alex   | Python | 6000 |
++--------+--------+------+
+7 rows in set (0.04 sec)
+
+# Now we can perform our previous joins queries in easy way shown below.
+
+Q1. Display student name and course name in which tey have enrolled
++--------+--------+
+| s_name | c_name |
++--------+--------+
+| Raju   | PD     |
+| Raju   | Java   |
+| Raju   | Linux  |
+| Sham   | Linux  |
+| Sham   | Java   |
+| Paul   | SQL    |
+| Alex   | Python |
++--------+--------+
+
+solution:
+
+mysql> SELECT s_name, c_name FROM inst_info;
++--------+--------+
+| s_name | c_name |
++--------+--------+
+| Raju   | PD     |
+| Raju   | Java   |
+| Raju   | Linux  |
+| Sham   | Linux  |
+| Sham   | Java   |
+| Paul   | SQL    |
+| Alex   | Python |
++--------+--------+
+7 rows in set (0.00 sec)
+
+
+Q2. Print No. of students for each course.
++--------+---------------+
+| c_name | COUNT(s_name) |
++--------+---------------+
+| PD     |             1 |
+| Java   |             2 |
+| Linux  |             2 |
+| SQL    |             1 |
+| Python |             1 |
++--------+---------------+
+
+Solution:
+
+mysql> SELECT  c_name, COUNT(s_name) FROM inst_info GROUP BY c_name;
++--------+---------------+
+| c_name | COUNT(s_name) |
++--------+---------------+
+| PD     |             1 |
+| Java   |             2 |
+| Linux  |             2 |
+| SQL    |             1 |
+| Python |             1 |
++--------+---------------+
+5 rows in set (0.00 sec)
+
+
+
+Q3. Print no. of courses taken by each students.
++--------+---------------+
+| s_name | COUNT(c_name) |
++--------+---------------+
+| Raju   |             3 |
+| Sham   |             2 |
+| Paul   |             1 |
+| Alex   |             1 |
++--------+---------------+
+
+Solution:
+
+mysql> SELECT s_name, COUNT(c_name) FROM inst_info GROUP BY s_name;
++--------+---------------+
+| s_name | COUNT(c_name) |
++--------+---------------+
+| Raju   |             3 |
+| Sham   |             2 |
+| Paul   |             1 |
+| Alex   |             1 |
++--------+---------------+
+4 rows in set (0.00 sec)
+
+
+
+Q4. Display Total fees paid by each student:
++--------+-----------+
+| s_name | SUM(fees) |
++--------+-----------+
+| Raju   |     10500 |
+| Sham   |      7500 |
+| Paul   |      4000 |
+| Alex   |      6000 |
++--------+-----------+
+
+mysql> SELECT s_name, SUM(fees) FROM inst_info GROUP BY s_name;
++--------+-----------+
+| s_name | SUM(fees) |
++--------+-----------+
+| Raju   |     10500 |
+| Sham   |      7500 |
+| Paul   |      4000 |
+| Alex   |      6000 |
++--------+-----------+
+4 rows in set (0.00 sec)
+
+
+DELETE VIEW:
+DROP VIEW  inst_info;
+
+
+
+*************************************************************************************************************************************************************************
+*                                    *
+*  47. HAVING Clause                 *
+*                                    *
+**************************************
+
+# Use with group by clause.
+
+Q. Display student name who have paid more than 5000 fees overall.
+# If we try to use where clause it will throw an error
+
+mysql> SELECT s_name,SUM(fees) FROM inst_info GROUP BY s_name WHERE SUM(fees) >5000;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual
+that corresponds to your MySQL server version for the right syntax to 
+use near 'WHERE SUM(fees) >5000' at line 1
+
+# Using HAVING Clause:
+
+mysql> SELECT s_name,SUM(fees) FROM inst_info GROUP BY s_name HAVING SUM(fees) > 5000;
++--------+-----------+
+| s_name | SUM(fees) |
++--------+-----------+
+| Raju   |     10500 |
+| Sham   |      7500 |
+| Alex   |      6000 |
++--------+-----------+
+3 rows in set (0.00 sec)
+
+
+
+
+
+*************************************************************************************************************************************************************************
+*                                    *
+*  47. ROLLUP Clause                 *
+*                                    *
+**************************************
+
+# Adds additional row at the end.
+# Use with group by.
+
+mysql> SELECT s_name,SUM(fees) FROM inst_info GROUP BY s_name WITH ROLLUP;
++--------+-----------+
+| s_name | SUM(fees) |
++--------+-----------+
+| Alex   |      6000 |
+| Paul   |      4000 |
+| Raju   |     10500 |
+| Sham   |      7500 |
+| NULL   |     28000 |
++--------+-----------+
+5 rows in set (0.04 sec)
+
+# Change NULL into Total:
+
+mysql> SELECT IFNULL(s_name, 'Total'),SUM(fees) FROM inst_info GROUP BY s_name WITH ROLLUP;
++-------------------------+-----------+
+| IFNULL(s_name, 'Total') | SUM(fees) |
++-------------------------+-----------+
+| Alex                    |      6000 |
+| Paul                    |      4000 |
+| Raju                    |     10500 |
+| Sham                    |      7500 |
+| Total                   |     28000 |
++-------------------------+-----------+
+5 rows in set (0.00 sec)
+
+
+Number of fees paid by each student and total.
+mysql> SELECT IFNULL(s_name, 'Total'), COUNT(fees) FROM inst_info GROUP BY s_name WITH ROLLUP;
++-------------------------+-------------+
+| IFNULL(s_name, 'Total') | COUNT(fees) |
++-------------------------+-------------+
+| Alex                    |           1 |
+| Paul                    |           1 |
+| Raju                    |           3 |
+| Sham                    |           2 |
+| Total                   |           7 |
++-------------------------+-------------+
+5 rows in set (0.00 sec)
