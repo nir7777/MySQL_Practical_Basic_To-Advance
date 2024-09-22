@@ -3907,3 +3907,25 @@ mysql> SELECT IFNULL(s_name, 'Total'), COUNT(fees) FROM inst_info GROUP BY s_nam
 | Total                   |           7 |
 +-------------------------+-------------+
 5 rows in set (0.00 sec)
+
+
+
+
+*************************************************************************************************************************************************************************
+*                                    *
+*  48. Stored Routine                *
+*                                    *
+**************************************
+
+# An SQL statement or a set of SQL statement that can be stored on
+  database server which can be calll no. of times.
+# Two types of Stored Routines:
+  1. STORED Procedure
+  2. User Defined Functions
+
+  1. STORED PROCEDURE:
+     These are routines that contain a series of SQL statements and 
+     procedural logic.
+     Often used for performaing actions like data modification, transaction
+     control, and executing sequence of statements.
+      
