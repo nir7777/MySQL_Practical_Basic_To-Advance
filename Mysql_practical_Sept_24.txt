@@ -3929,3 +3929,463 @@ mysql> SELECT IFNULL(s_name, 'Total'), COUNT(fees) FROM inst_info GROUP BY s_nam
      Often used for performaing actions like data modification, transaction
      control, and executing sequence of statements.
       
+DELIMITER: 
+# After writing query we use semicolon as end sign, it is called as  
+  delimiter.
+# We can change this delimiter from ; to any other as shown below
+
+
+mysql> DELIMITER $$
+mysql> CREATE PROCEDURE emp_info()
+    -> BEGIN
+    ->   SELECT * FROM employees ORDER BY SALARY;
+    -> END$$
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> DELIMITER ;
+
+mysql> call emp_info();
++--------+--------+-------------+------------+-----------+--------+
+| emp_id | name   | designation | dept       | lastname  | SALARY |
++--------+--------+-------------+------------+-----------+--------+
+|    103 | Paul   | Associate   | IT         | Verma     |  25000 |
+|    101 | Raju   | Manager     | Loan       | Sharma    |  30000 |
+|    105 | Victor | Associate   | Deposit    | Corse     |  30000 |
+|    109 | Vishu  | Lead        | Deposit    | Rick      |  30000 |
+|    104 | Alex   | Accountant  | Account    | Rajput    |  45000 |
+|    108 | Mayur  | Cashier     | Account    | Wankhede  |  45000 |
+|    111 | Manish | Associate   | Operations | Patil     |  45000 |
+|    106 | Akshay | Manager     | IT         | kadam     |  50000 |
+|    107 | Pravin | Lead        | IT         | Gartadkar |  70000 |
+|    110 | Shan   | Peon        | Staff      | Patil     |  70000 |
++--------+--------+-------------+------------+-----------+--------+
+10 rows in set (0.02 sec)
+
+
+
+*************************************************************************************************************************************************************************
+*                                             *
+*  49. Argument passing in Stored Procedure:  *
+*                                             *
+***********************************************
+
+
+Display emp id of employee by passing their name as Argument
+
+mysql> DELIMITER $$
+mysql> CREATE PROCEDURE get_emp_code(IN Ename VARCHAR(50))
+    -> BEGIN
+    ->    SELECT emp_id FROM employees WHERE name = Ename;
+    -> END$$
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> call get_emp_code('Manish');
++--------+
+| emp_id |
++--------+
+|    111 |
++--------+
+1 row in set (0.00 sec)
+
+
+*************************************************************************************************************************************************************************
+*                                                           *
+*  50. Returning Output In Variable In Stored Procedure:    *
+*                                                           *
+*************************************************************
+
+
+mysql> DELIMITER $$
+mysql> CREATE PROCEDURE get_sum_by_dept(IN p_dept VARCHAR(50), OUT p_sum DECIMAL(10,2))
+    -> BEGIN
+    -> SELECT SUM(SALARY) INTO p_sum FROM employees WHERE dept = p_dept;
+    -> END$$
+Query OK, 0 rows affected (0.02 sec)
+
+
+mysql> DELIMITER ;
+
+mysql> SET @emp_sum=0;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> CALL get_sum_by_dept('IT', @emp_sum);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> SELECT @emp_sum;
++-----------+
+| @emp_sum  |
++-----------+
+| 145000.00 |
++-----------+
+1 row in set (0.00 sec)
+
+
+2. User Defined Fuctions:
+
+
+
+
+DELIMITER $$
+
+CREATE FUNCTION emp_name_max_salary() 
+RETURNS VARCHAR(50)
+DETERMINISTIC
+BEGIN
+    DECLARE v_max INT;
+    DECLARE v_emp_name VARCHAR(50);
+    SELECT MAX(SALARY) INTO v_max 
+    FROM employees;
+    SELECT name INTO v_emp_name 
+    FROM employees
+    WHERE SALARY = v_max
+    RETURN v_emp_name;
+END$$
+
+DELIMITER ;
+
+mysql> SELECT bank_db.emp_name_max_salary();
++-------------------------------+
+| bank_db.emp_name_max_salary() |
++-------------------------------+
+| Pravin                        |
++-------------------------------+
+1 row in set (0.00 sec)
+
+
+
+*************************************************************************************************************************************************************************
+*                        *                                   
+*  50. Window functions  *
+*                        *                                   
+**************************
+
+# Introduced in version 8.0.
+# Works in 8.0 and above
+
+# Window functions, also known as analytic functions allow you to perform 
+ calculations across a set of rows related to the current row.
+
+# Lets try window function 
+Here it returns same sum of salary for all records.
+mysql> SELECT SUM(SALARY) OVER() AS SUM_SAL FROM employees;
++---------+
+| SUM_SAL |
++---------+
+|  440000 |
+|  440000 |
+|  440000 |
+|  440000 |
+|  440000 |
+|  440000 |
+|  440000 |
+|  440000 |
+|  440000 |
+|  440000 |
++---------+
+10 rows in set (0.04 sec)
+
+
+
+mysql> SELECT emp_id, dept, SALARY,
+    -> SUM(SALARY) OVER(ORDER BY emp_id) as SUM_Salary
+    -> FROM employees;
++--------+------------+--------+------------+
+| emp_id | dept       | SALARY | SUM_Salary |
++--------+------------+--------+------------+
+|    101 | Loan       |  30000 |      30000 |
+|    103 | IT         |  25000 |      55000 |
+|    104 | Account    |  45000 |     100000 |
+|    105 | Deposit    |  30000 |     130000 |
+|    106 | IT         |  50000 |     180000 |
+|    107 | IT         |  70000 |     250000 |
+|    108 | Account    |  45000 |     295000 |
+|    109 | Deposit    |  30000 |     325000 |
+|    110 | Staff      |  70000 |     395000 |
+|    111 | Operations |  45000 |     440000 |
++--------+------------+--------+------------+
+10 rows in set (0.01 sec)
+
+
+
+Partition means grouping
+
+
+mysql> SELECT emp_id, dept, SALARY,
+    -> SUM(SALARY) OVER(PARTITION BY dept) as SUM_Salary
+    -> FROM employees;
++--------+------------+--------+------------+
+| emp_id | dept       | SALARY | SUM_Salary |
++--------+------------+--------+------------+
+|    104 | Account    |  45000 |      90000 |
+|    108 | Account    |  45000 |      90000 |
+|    105 | Deposit    |  30000 |      60000 |
+|    109 | Deposit    |  30000 |      60000 |
+|    103 | IT         |  25000 |     145000 |
+|    106 | IT         |  50000 |     145000 |
+|    107 | IT         |  70000 |     145000 |
+|    101 | Loan       |  30000 |      30000 |
+|    111 | Operations |  45000 |      45000 |
+|    110 | Staff      |  70000 |      70000 |
++--------+------------+--------+------------+
+10 rows in set (0.00 sec)
+
+
+
+mysql> SELECT emp_id, dept, SALARY,
+    -> MAX(SALARY) OVER(ORDER BY emp_id) as MAX_Salary
+    -> FROM employees;
++--------+------------+--------+------------+
+| emp_id | dept       | SALARY | MAX_Salary |
++--------+------------+--------+------------+
+|    101 | Loan       |  30000 |      30000 |
+|    103 | IT         |  25000 |      30000 |
+|    104 | Account    |  45000 |      45000 |
+|    105 | Deposit    |  30000 |      45000 |
+|    106 | IT         |  50000 |      50000 |
+|    107 | IT         |  70000 |      70000 |
+|    108 | Account    |  45000 |      70000 |
+|    109 | Deposit    |  30000 |      70000 |
+|    110 | Staff      |  70000 |      70000 |
+|    111 | Operations |  45000 |      70000 |
++--------+------------+--------+------------+
+10 rows in set (0.00 sec)
+
+We can also use;
+ROW_NUMBER()
+RANK()
+DENSE_RANK()
+LAG()
+LEAD()
+
+ROW_NUMBER:
+
+mysql> SELECT
+    -> ROW_NUMBER() OVER() AS row_no,
+    -> emp_id,
+    -> dept,
+    -> SALARY FROM employees;
++--------+--------+------------+--------+
+| row_no | emp_id | dept       | SALARY |
++--------+--------+------------+--------+
+|      1 |    101 | Loan       |  30000 |
+|      2 |    103 | IT         |  25000 |
+|      3 |    104 | Account    |  45000 |
+|      4 |    105 | Deposit    |  30000 |
+|      5 |    106 | IT         |  50000 |
+|      6 |    107 | IT         |  70000 |
+|      7 |    108 | Account    |  45000 |
+|      8 |    109 | Deposit    |  30000 |
+|      9 |    110 | Staff      |  70000 |
+|     10 |    111 | Operations |  45000 |
++--------+--------+------------+--------+
+10 rows in set (0.01 sec)
+
+
+
+mysql> SELECT
+    -> ROW_NUMBER() OVER(ORDER BY SALARY) AS row_no,
+    -> emp_id, dept, SALARY FROM employees;
++--------+--------+------------+--------+
+| row_no | emp_id | dept       | SALARY |
++--------+--------+------------+--------+
+|      1 |    103 | IT         |  25000 |
+|      2 |    101 | Loan       |  30000 |
+|      3 |    105 | Deposit    |  30000 |
+|      4 |    109 | Deposit    |  30000 |
+|      5 |    104 | Account    |  45000 |
+|      6 |    108 | Account    |  45000 |
+|      7 |    111 | Operations |  45000 |
+|      8 |    106 | IT         |  50000 |
+|      9 |    107 | IT         |  70000 |
+|     10 |    110 | Staff      |  70000 |
++--------+--------+------------+--------+
+10 rows in set (0.00 sec)
+
+
+mysql> SELECT
+    -> ROW_NUMBER() OVER(PARTITION BY dept) AS row_no,
+    -> emp_id, dept, SALARY FROM employees;
++--------+--------+------------+--------+
+| row_no | emp_id | dept       | SALARY |
++--------+--------+------------+--------+
+|      1 |    104 | Account    |  45000 |
+|      2 |    108 | Account    |  45000 |
+|      1 |    105 | Deposit    |  30000 |
+|      2 |    109 | Deposit    |  30000 |
+|      1 |    103 | IT         |  25000 |
+|      2 |    106 | IT         |  50000 |
+|      3 |    107 | IT         |  70000 |
+|      1 |    101 | Loan       |  30000 |
+|      1 |    111 | Operations |  45000 |
+|      1 |    110 | Staff      |  70000 |
++--------+--------+------------+--------+
+10 rows in set (0.00 sec)
+
+
+
+2. RANK():
+
+mysql> SELECT
+    -> emp_id, dept, SALARY,
+    -> RANK() OVER() AS Rank_sal
+    -> FROM employees;
++--------+------------+--------+----------+
+| emp_id | dept       | SALARY | Rank_sal |
++--------+------------+--------+----------+
+|    101 | Loan       |  30000 |        1 |
+|    103 | IT         |  25000 |        1 |
+|    104 | Account    |  45000 |        1 |
+|    105 | Deposit    |  30000 |        1 |
+|    106 | IT         |  50000 |        1 |
+|    107 | IT         |  70000 |        1 |
+|    108 | Account    |  45000 |        1 |
+|    109 | Deposit    |  30000 |        1 |
+|    110 | Staff      |  70000 |        1 |
+|    111 | Operations |  45000 |        1 |
++--------+------------+--------+----------+
+10 rows in set (0.00 sec)
+
+
+
+mysql> SELECT
+    -> emp_id, dept, SALARY,
+    -> RANK() OVER(ORDER BY SALARY) AS Rank_sal
+    -> FROM employees;
++--------+------------+--------+----------+
+| emp_id | dept       | SALARY | Rank_sal |
++--------+------------+--------+----------+
+|    103 | IT         |  25000 |        1 |
+|    101 | Loan       |  30000 |        2 |
+|    105 | Deposit    |  30000 |        2 |
+|    109 | Deposit    |  30000 |        2 |
+|    104 | Account    |  45000 |        5 |
+|    108 | Account    |  45000 |        5 |
+|    111 | Operations |  45000 |        5 |
+|    106 | IT         |  50000 |        8 |
+|    107 | IT         |  70000 |        9 |
+|    110 | Staff      |  70000 |        9 |
++--------+------------+--------+----------+
+10 rows in set (0.00 sec)
+
+
+
+
+
+3. DENSE_RANK(): Gives better result than rank. Please check the difff
+
+mysql> SELECT
+    -> emp_id, dept, SALARY,
+    -> DENSE_RANK() OVER(ORDER BY SALARY) AS Rank_sal
+    -> FROM employees;
++--------+------------+--------+----------+
+| emp_id | dept       | SALARY | Rank_sal |
++--------+------------+--------+----------+
+|    103 | IT         |  25000 |        1 |
+|    101 | Loan       |  30000 |        2 |
+|    105 | Deposit    |  30000 |        2 |
+|    109 | Deposit    |  30000 |        2 |
+|    104 | Account    |  45000 |        3 |
+|    108 | Account    |  45000 |        3 |
+|    111 | Operations |  45000 |        3 |
+|    106 | IT         |  50000 |        4 |
+|    107 | IT         |  70000 |        5 |
+|    110 | Staff      |  70000 |        5 |
++--------+------------+--------+----------+
+10 rows in set (0.00 sec)
+
+
+
+4. LAG():
+# Applicable on a column.
+# lags one previous record.
+
+mysql> SELECT
+    -> emp_id, dept, SALARY,
+    -> LAG(SALARY) OVER() AS Lag_sal
+    -> FROM employees;
++--------+------------+--------+---------+
+| emp_id | dept       | SALARY | Lag_sal |
++--------+------------+--------+---------+
+|    101 | Loan       |  30000 |    NULL |
+|    103 | IT         |  25000 |   30000 |
+|    104 | Account    |  45000 |   25000 |
+|    105 | Deposit    |  30000 |   45000 |
+|    106 | IT         |  50000 |   30000 |
+|    107 | IT         |  70000 |   50000 |
+|    108 | Account    |  45000 |   70000 |
+|    109 | Deposit    |  30000 |   45000 |
+|    110 | Staff      |  70000 |   30000 |
+|    111 | Operations |  45000 |   70000 |
++--------+------------+--------+---------+
+10 rows in set (0.01 sec)
+
+Where to use??
+
+mysql> SELECT
+    -> emp_id, dept, SALARY,
+    -> SALARY - LAG(SALARY) OVER(ORDER BY SALARY DESC) AS diff_Lag_sal
+    -> FROM employees;
++--------+------------+--------+--------------+
+| emp_id | dept       | SALARY | diff_Lag_sal |
++--------+------------+--------+--------------+
+|    107 | IT         |  70000 |         NULL |
+|    110 | Staff      |  70000 |            0 |
+|    106 | IT         |  50000 |       -20000 |
+|    104 | Account    |  45000 |        -5000 |
+|    108 | Account    |  45000 |            0 |
+|    111 | Operations |  45000 |            0 |
+|    101 | Loan       |  30000 |       -15000 |
+|    105 | Deposit    |  30000 |            0 |
+|    109 | Deposit    |  30000 |            0 |
+|    103 | IT         |  25000 |        -5000 |
++--------+------------+--------+--------------+
+10 rows in set (0.00 sec)
+
+
+
+5. LEAD()
+
+mysql> SELECT
+    -> emp_id, dept, SALARY,
+    -> LEAD(SALARY) OVER() AS Lag_sal
+    -> FROM employees;
++--------+------------+--------+---------+
+| emp_id | dept       | SALARY | Lag_sal |
++--------+------------+--------+---------+
+|    101 | Loan       |  30000 |   25000 |
+|    103 | IT         |  25000 |   45000 |
+|    104 | Account    |  45000 |   30000 |
+|    105 | Deposit    |  30000 |   50000 |
+|    106 | IT         |  50000 |   70000 |
+|    107 | IT         |  70000 |   45000 |
+|    108 | Account    |  45000 |   30000 |
+|    109 | Deposit    |  30000 |   70000 |
+|    110 | Staff      |  70000 |   45000 |
+|    111 | Operations |  45000 |    NULL |
++--------+------------+--------+---------+
+10 rows in set (0.00 sec)
+
+
+
+Where to use??
+
+
+mysql> SELECT
+    -> emp_id, dept, SALARY,
+    -> SALARY - LEAD(SALARY) OVER(ORDER BY SALARY DESC) AS diff_Lead_sal
+    -> FROM employees;
++--------+------------+--------+---------------+
+| emp_id | dept       | SALARY | diff_Lead_sal |
++--------+------------+--------+---------------+
+|    107 | IT         |  70000 |             0 |
+|    110 | Staff      |  70000 |         20000 |
+|    106 | IT         |  50000 |          5000 |
+|    104 | Account    |  45000 |             0 |
+|    108 | Account    |  45000 |             0 |
+|    111 | Operations |  45000 |         15000 |
+|    101 | Loan       |  30000 |             0 |
+|    105 | Deposit    |  30000 |             0 |
+|    109 | Deposit    |  30000 |          5000 |
+|    103 | IT         |  25000 |          NULL |
++--------+------------+--------+---------------+
+10 rows in set (0.00 sec)
